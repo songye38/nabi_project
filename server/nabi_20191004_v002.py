@@ -177,11 +177,6 @@ def checkPoint(_userId,_mode):
 def actShow(_keyword):
     return { "result": "success", "value": "어떤 키워드도 입력하지 않았다면 기본적으로 내가 지금까지 했던 모든 활동들을 보여줌"}
 
-@app.route('/actSearch',methods=['POST'])
-def actSearch():
-    data = request.json
-    return { "result": "success", "value": data}
-
 #==============================================================================================설정탭
 #프로필 사진 바꾸기
 @app.route('/setting/profile',methods=['POST'])
