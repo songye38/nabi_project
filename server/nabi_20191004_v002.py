@@ -17,17 +17,19 @@ def login():
     return { "result": "success", "value": data}
     
 #===============================================================================================비밀번호 찾기 기능
-@app.route('/findPwd/<_mode>',methods=['POST'])
-def findPwd(_mode):
-    if _mode =='input':
-        data = request.json
-        return { "result": "success", "value": data}
-    elif _mode =='authentication':
-        data = request.json
-        return { "result": "success", "value": data}
-    elif _mode =='reset':
-        data = request.json
-        return { "result": "success", "value": data}
+@app.route('/findPwd',methods=['POST'])
+def findPwd():
+    data = request.json
+    return { "result": "success", "value": data}
+    # if _mode =='input':
+    #     data = request.json
+    #     return { "result": "success", "value": data}
+    # elif _mode =='authentication':
+    #     data = request.json
+    #     return { "result": "success", "value": data}
+    # elif _mode =='reset':
+    #     data = request.json
+    #     return { "result": "success", "value": data}
 
 #===============================================================================================메인탭
 @app.route('/main/<_userId>',methods=['GET'])
@@ -98,13 +100,13 @@ def offRead(_comNo,_id):
     result = {"committeeNo": _comNo, "articleNo": _id}
     return { "result": "success", "value": result}
 
-@app.route('/off/write/<_comNo>/<_id>',methods=['POST'])
-def offWrite(_comNo,_id):
+@app.route('/off/write',methods=['POST'])
+def offWrite():
         data = request.json
         return { "result": "success", "value": data}
 
-@app.route('/off/delete/<_comNo>/<_id>',methods=['POST'])
-def offDelete(_comNo,_id):
+@app.route('/off/delete',methods=['POST'])
+def offDelete():
     data = request.json
     return { "result": "success", "value": data}
 #===============================================================================================대화하기 관련
@@ -119,18 +121,18 @@ def talkRead(_comNo,_id):
     result = {"committeeNo": _comNo,"articleId":_id}
     return { "result": "success", "value": result}
 
-@app.route('/talk/write/<_comNo>/<_id>',methods=['POST'])
-def talkWrite(_comNo,_id):
+@app.route('/talk/write',methods=['POST'])
+def talkWrite():
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/talk/update/<_comNo>/<_id>',methods=['POST'])
-def talkUpdate(_comNo,_id):
+@app.route('/talk/update',methods=['POST'])
+def talkUpdate():
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/talk/delete/<_comNo>/<_id>',methods=['POST'])
-def talkDelete(_comNo,_id):
+@app.route('/talk/delete',methods=['POST'])
+def talkDelete():
     data = request.json
     return { "result": "success", "value": data}
 
@@ -146,18 +148,18 @@ def shareRead(_comNo,_id):
     result = {"committeeNo": _comNo,"articleId":_id}
     return { "result": "success", "value": result}
 
-@app.route('/share/write/<_comNo>/<_id>',methods=['POST'])
-def shareWrite(_comNo,_id):
+@app.route('/share/write',methods=['POST'])
+def shareWrite():
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/share/update/<_comNo>/<_id>',methods=['POST'])
-def shareUpdate(_comNo,_id):
+@app.route('/share/update',methods=['POST'])
+def shareUpdate():
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/share/delete/<_comNo>/<_id>',methods=['POST'])
-def shareDelete(_comNo,_id):
+@app.route('/share/delete',methods=['POST'])
+def shareDelete():
     data = request.json
     return { "result": "success", "value": data}
 
@@ -186,15 +188,17 @@ def changePic():
 
 
 #비밀번호 바꾸기
-@app.route('/setting/pwd/<_mode>',methods=['POST'])
-def changePwd(_mode):
-    if _mode =='confirm':
-        data = request.json
-        return { "result": "success", "value": data}
+@app.route('/setting/pwd',methods=['POST'])
+def changePwd():
+    data = request.json
+    return { "result": "success", "value": data}
+    # if _mode =='confirm':
+    #     data = request.json
+    #     return { "result": "success", "value": data}
 
-    elif _mode =='reset':
-        data = request.json
-        return { "result": "success", "value": data}
+    # elif _mode =='reset':
+    #     data = request.json
+    #     return { "result": "success", "value": data}
 
 
 #닉네임 수정
