@@ -53,7 +53,7 @@ def main(_userId):
 @app.route('/comSearch/<_keyword>',methods=['GET'])
 def comShow(_keyword):
     result = {"keyworkd": _keyword}
-    return { "result": "success", "value": resu}
+    return { "result": "success", "value": result}
     
 @app.route('/comSearch',methods=['POST'])
 def comSearch():
