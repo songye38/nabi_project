@@ -115,7 +115,7 @@ def offWrite(_comNo,_id):
         data = request.json
         return { "result": "success", "value": data}
 
-@app.route('/off/delete/<_comNo>/<_id>',methods=['DELETE'])
+@app.route('/off/delete/<_comNo>/<_id>',methods=['POST'])
 def offDelete(_comNo,_id):
     data = request.json
     return { "result": "success", "value": data}
@@ -136,12 +136,12 @@ def talkWrite(_comNo,_id):
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/talk/update/<_comNo>/<_id>',methods=['PUT'])
+@app.route('/talk/update/<_comNo>/<_id>',methods=['POST'])
 def talkUpdate(_comNo,_id):
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/talk/delete/<_comNo>/<_id>',methods=['DELETE'])
+@app.route('/talk/delete/<_comNo>/<_id>',methods=['POST'])
 def talkDelete(_comNo,_id):
     data = request.json
     return { "result": "success", "value": data}
@@ -163,12 +163,12 @@ def shareWrite(_comNo,_id):
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/share/update/<_comNo>/<_id>',methods=['PUT'])
+@app.route('/share/update/<_comNo>/<_id>',methods=['POST'])
 def shareUpdate(_comNo,_id):
     data = request.json
     return { "result": "success", "value": data}
 
-@app.route('/share/delete/<_comNo>/<_id>',methods=['DELETE'])
+@app.route('/share/delete/<_comNo>/<_id>',methods=['POST'])
 def shareDelete(_comNo,_id):
     data = request.json
     return { "result": "success", "value": data}
