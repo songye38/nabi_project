@@ -1,5 +1,6 @@
 from flask import Flask,render_template, request, redirect,jsonify
 import sys
+import json
 import pymysql
 app = Flask(__name__)
 
@@ -7,22 +8,23 @@ app = Flask(__name__)
 mysql = pymysql.connect(host='52.79.226.172',port = 53139, user='root', password='songyeS0308!!',db='nabiDB', charset='utf8')
 
 # mysql 으로부터 Cursor 생성
-curs = mysql.cursor()
- 
-# SQL문 실행
-sql = "select * from user"
-curs.execute(sql)
- 
-# 데이타 Fetch
-rows = curs.fetchall()
-for row in rows:
-    print(row)
- 
+
+
 #===============================================================================================회원가입
  #회원가입 관련 API part   
 @app.route('/register',methods=['POST'])
 def register():
     data = request.json
+    sql = "INSERT INTO user(user_email,user_pwd,user_name) VALUES(" +'"'+data["email"] + '"'+","+'"'+data["pwd"]+'"' +","+'"' +data["name"]+'"'+")"
+    curs = mysql.cursor()
+    try:
+        curs.execute(sql)
+        mysql.commit()
+    except (MySQLdb.Error, MySQLdb.Warning) as e:
+        print(e)
+    finally:
+        curs.close()
+        print("save success!")
     return { "result": "success", "value": data}
 
 #===============================================================================================로그인
@@ -250,8 +252,6 @@ def push(_mode):
     return { "result": "success", "value": result}
 
 #===============================================================================================Connection 닫기
-mysql.close()
-
 #===============================================================================================서버 실행 부분 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000,debug=True)
