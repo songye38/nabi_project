@@ -1,6 +1,7 @@
 from flask import Flask,render_template, request, redirect,jsonify
 import sys
 import pymysql
+import hashlib
 app = Flask(__name__)
 
 #===============================================================================================mysql 연결
@@ -12,15 +13,16 @@ mysql = pymysql.connect(host='52.79.226.172',port = 53139, user='root', password
 @app.route('/register',methods=['POST'])
 def register():
     data = request.json
+    data["pwd"] = hashlib.sha256(data["pwd"].encode()).hexdigest()
     curs = mysql.cursor()
     search_query = "select user_email from user where user_email="+'"'+data["email"]+'"'
     curs.execute(search_query)
     rows = curs.fetchall()
     if len(rows) >0:
-        print("다른 이메일을 사용해주세요.")
         return { "result": "fail", "value": data}
     else:
         sql = "INSERT INTO user(user_email,user_pwd,user_name) VALUES(" +'"'+data["email"] + '"'+","+'"'+data["pwd"]+'"' +","+'"' +data["name"]+'"'+")"
+        print(sql)
         try:
             curs.execute(sql)
             mysql.commit()
