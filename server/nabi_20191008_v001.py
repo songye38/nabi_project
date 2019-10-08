@@ -18,6 +18,7 @@ def register():
     rows = curs.fetchall()
     if len(rows) >0:
         print("다른 이메일을 사용해주세요.")
+        return { "result": "fail", "value": data}
     else:
         sql = "INSERT INTO user(user_email,user_pwd,user_name) VALUES(" +'"'+data["email"] + '"'+","+'"'+data["pwd"]+'"' +","+'"' +data["name"]+'"'+")"
         try:
@@ -28,7 +29,7 @@ def register():
         finally:
             curs.close()
             print("save success!")
-    return { "result": "success", "value": data}
+            return { "result": "success", "value": data}
 
 #===============================================================================================로그인
  #로그인 관련 API part 
