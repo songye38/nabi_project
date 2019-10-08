@@ -7,6 +7,13 @@ app = Flask(__name__)
 #===============================================================================================mysql 연결
 mysql = pymysql.connect(host='52.79.226.172',port = 53139, user='root', password='songyeS0308!!',db='nabiDB', charset='utf8')
 
+# 회원정보를 담은 테이블
+# create table user (
+# user_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+# user_email VARCHAR(50) NOT NULL,
+# user_pwd VARCHAR(50) NOT NULL,
+# user_name VARCHAR(50) NOT NULL
+# ) CHARSET=utf8;
 
 #===============================================================================================회원가입
  #회원가입 관련 API part   
