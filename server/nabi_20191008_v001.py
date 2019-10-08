@@ -15,6 +15,9 @@ mysql = pymysql.connect(host='52.79.226.172',port = 53139, user='root', password
 # user_name VARCHAR(50) NOT NULL
 # ) CHARSET=utf8;
 
+#수정하고자 하는 부분 alter table user modify user_email varchar(20) not null;
+#수정하고자 하는 부분 alter table user modify user_pwd varchar(50) not null;
+
 #===============================================================================================회원가입
  #회원가입 관련 API part   
 @app.route('/register',methods=['POST'])
@@ -27,7 +30,7 @@ def register():
     if len(rows) >0:
         return { "result": "fail", "value":data,"message":"이미 계정이 존재합니다."}
     else:
-        data["pwd"] = hashlib.sha256(data["pwd"].encode()).hexdigest()
+        data["pwd"] = hashlib.sha1(data["pwd"].encode()).hexdigest()
         sql = "INSERT INTO user(user_email,user_pwd,user_name) VALUES(" +'"'+data["email"] + '"'+","+'"'+data["pwd"]+'"' +","+'"' +data["name"]+'"'+")"
         try:
             curs.execute(sql)
