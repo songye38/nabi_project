@@ -8,6 +8,13 @@ app = Flask(__name__)
 #===============================================================================================mysql 연결
 mysql = pymysql.connect(host='52.79.226.172',port = 53139, user='root', password='songyeS0308!!',db='nabiDB', charset='utf8')
 
+# create table user (
+# user_no INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+# user_email VARCHAR(30) NOT NULL,
+# user_pwd VARCHAR(50) NOT NULL,
+# user_name VARCHAR(10) NOT NULL,
+# user_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+# ) CHARSET=utf8;
 
 #===============================================================================================회원가입
  #회원가입 관련 API part   
@@ -22,10 +29,9 @@ def register():
         return { "result": "fail", "value":data,"message":"이미 계정이 존재합니다."}
     else:
         data["pwd"] = hashlib.sha1(data["pwd"].encode()).hexdigest()
-        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        sql = "INSERT INTO user(user_email,user_pwd,user_name,user_date) VALUES(" +'"'+data["email"] + '"'+","+'"'+data["pwd"]+'"' +","+'"' +data["name"]+'"'+","+"'"+now+"'"+")"
         try:
-            curs.execute(sql)
+            sql = "INSERT INTO `user` (`user_email`, `user_pwd`, `user_name`, `user_date`) VALUES (%s, %s,%s,now())"
+            curs.execute(sql, (data["email"],data["pwd"],data["name"]))
             mysql.commit()
         except (MySQLdb.Error, MySQLdb.Warning) as e:
             print(e)
