@@ -13,7 +13,6 @@ mysql = pymysql.connect(host='52.79.226.172',port = 53139, user='root', password
 @app.route('/register',methods=['POST'])
 def register():
     data = request.json
-    data["pwd"] = hashlib.sha256(data["pwd"].encode()).hexdigest()
     curs = mysql.cursor()
     search_query = "select user_email from user where user_email="+'"'+data["email"]+'"'
     curs.execute(search_query)
@@ -21,8 +20,8 @@ def register():
     if len(rows) >0:
         return { "result": "fail", "value": data}
     else:
+        data["pwd"] = hashlib.sha256(data["pwd"].encode()).hexdigest()
         sql = "INSERT INTO user(user_email,user_pwd,user_name) VALUES(" +'"'+data["email"] + '"'+","+'"'+data["pwd"]+'"' +","+'"' +data["name"]+'"'+")"
-        print(sql)
         try:
             curs.execute(sql)
             mysql.commit()
