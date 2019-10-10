@@ -39,12 +39,9 @@ mysql = pymysql.connect(host='52.79.226.172',port = 53139, user='root', password
 # on_link varchar(30) not null,
 # on_status int(1) unsigned not null,
 # on_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE  CURRENT_TIMESTAMP,
-# comm_no int(10) unsigned not null
+# comm_no int(10) unsigned not null foreign key
 # ) CHARSET = utf8;
 
-# alter table onAction add constraint
-#     -> comm_no foreign key(comm_no)
-#     -> references comm(comm_no);
 
 #===============================================================================================회원가입
  #회원가입 관련 API part   
@@ -157,16 +154,16 @@ def onListup(_comNo):
     search_query = 'select * from onAction where comm_no='+_comNo
     curs = mysql.cursor()
     curs.execute(search_query)
-    result = curs.fetchall()
-    return { "result": "success", "value":result,"message":"성공적으로 조회하였습니다."}
+    fetch_result = curs.fetchall()
+    return { "result": "success", "value":fetch_result,"message":"성공적으로 조회하였습니다."}
 
 @app.route('/on/read/<_comNo>/<_id>',methods=['GET'])
 def onRead(_comNo,_id):
     search_query = 'select * from onAction where comm_no='+_comNo+" and on_no="+_id
     curs = mysql.cursor()
     curs.execute(search_query)
-    result = curs.fetchall()
-    return { "result": "success", "value": result,"message":"성공적으로 조회하였습니다."}
+	fetch_result = curs.fetchall()
+    return { "result": "success", "value": fetch_result,"message":"성공적으로 조회하였습니다."}
 
 #===============================================================================================오프라인 행동 관련
 
