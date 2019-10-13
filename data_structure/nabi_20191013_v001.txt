@@ -1,0 +1,167 @@
+비대위 정보를 저장
+#+---------------+------------------+------+-----+-------------------+-----------------------------+
+#| Field         | Type             | Null | Key | Default           | Extra                       |
+#+---------------+------------------+------+-----+-------------------+-----------------------------+
+#| comm_no       | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+#| comm_name     | varchar(50)      | NO   |     | NULL              |                             |
+#| comm_count    | int(10) unsigned | NO   |     | NULL              |                             |
+#| comm_date     | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+#| comm_category | varchar(30)      | NO   |     | NULL              |                             |
+#+---------------+------------------+------+-----+-------------------+-----------------------------+
+
+
+사람들이 가입한 비대위 목록을 저장하는 테이블
+#+------------------+------------------+------+-----+-------------------+-----------------------------+
+#| Field            | Type             | Null | Key | Default           | Extra                       |
+#+------------------+------------------+------+-----+-------------------+-----------------------------+
+#| commUser_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+#| commUser_user_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+#| commUser_comm_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+#| commUser_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+#+------------------+------------------+------+-----+-------------------+-----------------------------+
+
+
+사용자 정보를 저장하는 테이블
+# +-------------+------------------+------+-----+-------------------+-----------------------------+
+# | Field       | Type             | Null | Key | Default           | Extra                       |
+# +-------------+------------------+------+-----+-------------------+-----------------------------+
+# | user_no     | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+# | user_email  | varchar(30)      | NO   |     | NULL              |                             |
+# | user_pwd    | varchar(50)      | NO   |     | NULL              |                             |
+# | user_name   | varchar(10)      | NO   |     | NULL              |                             |
+# | user_pic    | mediumblob       | NO   |     | NULL              |                             |
+# | user_date   | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+# | user_status | varchar(1)       | NO   |     | 1                 |                             |
+# | user_push   | varchar(1)       | NO   |     | 1                 |                             |
+# +-------------+------------------+------+-----+-------------------+-----------------------------+
+
+
+오프라인 행동 목록을 저장하는 테이블 
+#+-------------+------------------+------+-----+-------------------+-----------------------------+
+#| Field       | Type             | Null | Key | Default           | Extra                       |
+#+-------------+------------------+------+-----+-------------------+-----------------------------+
+#| off_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+#| off_type    | varchar(10)      | NO   |     | NULL              |                             |
+#| off_title   | varchar(100)     | NO   |     | NULL              |                             |
+#| off_goal    | varchar(100)     | NO   |     | NULL              |                             |
+#| off_start   | date             | NO   |     | NULL              |                             |
+#| off_end     | date             | NO   |     | NULL              |                             |
+#| off_day     | date             | NO   |     | NULL              |                             |
+#| off_time    | varchar(10)      | NO   |     | NULL              |                             |
+#| off_loc     | varchar(50)      | NO   |     | NULL              |                             |
+#| off_lat     | float            | NO   |     | NULL              |                             |
+#| off_long    | float            | NO   |     | NULL              |                             |
+#| off_count   | int(10) unsigned | NO   |     | NULL              |                             |
+#| off_status  | int(1) unsigned  | NO   |     | NULL              |                             |
+#| off_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+#| off_comm_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+#+-------------+------------------+------+-----+-------------------+-----------------------------+
+
+
+사람들이 참여한 오프라인 행동 목록을 저장한 테이블
++----------------+------------------+------+-----+-------------------+-----------------------------+
+| Field          | Type             | Null | Key | Default           | Extra                       |
++----------------+------------------+------+-----+-------------------+-----------------------------+
+| onUser_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| onUser_user_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| onUser_on_no   | int(10) unsigned | NO   | MUL | NULL              |                             |
+| onUser_comm_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| onUser_content | varchar(2)       | NO   |     | NULL              |                             |
+| onUser_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++----------------+------------------+------+-----+-------------------+-----------------------------+
+
+
+온라인 행동 목록을 저장한 테이블
++------------+------------------+------+-----+-------------------+-----------------------------+
+| Field      | Type             | Null | Key | Default           | Extra                       |
++------------+------------------+------+-----+-------------------+-----------------------------+
+| on_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| on_type    | varchar(10)      | NO   |     | NULL              |                             |
+| on_title   | varchar(100)     | NO   |     | NULL              |                             |
+| on_start   | date             | NO   |     | NULL              |                             |
+| on_end     | date             | NO   |     | NULL              |                             |
+| on_count   | int(10) unsigned | YES  |     | NULL              |                             |
+| on_video   | varchar(30)      | YES  |     | NULL              |                             |
+| on_content | varchar(500)     | NO   |     | NULL              |                             |
+| on_link    | varchar(30)      | NO   |     | NULL              |                             |
+| on_status  | int(1) unsigned  | NO   |     | NULL              |                             |
+| on_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+| comm_no    | int(10) unsigned | NO   | MUL | NULL              |                             |
++------------+------------------+------+-----+-------------------+-----------------------------+
+
+
+대화 목록을 저장한 테이블
++--------------+------------------+------+-----+-------------------+-----------------------------+
+| Field        | Type             | Null | Key | Default           | Extra                       |
++--------------+------------------+------+-----+-------------------+-----------------------------+
+| talk_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| talk_title   | varchar(100)     | NO   |     | NULL              |                             |
+| talk_start   | date             | NO   |     | NULL              |                             |
+| talk_end     | date             | NO   |     | NULL              |                             |
+| talk_content | varchar(500)     | NO   |     | NULL              |                             |
+| talk_status  | int(10) unsigned | NO   |     | NULL              |                             |
+| talk_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+| talk_comm_no | int(10) unsigned | NO   | MUL | NULL              |                             |
++--------------+------------------+------+-----+-------------------+-----------------------------+
+
+사람들이 참여한 대화 목록을 저장한 테이블
++------------------+------------------+------+-----+-------------------+-----------------------------+
+| Field            | Type             | Null | Key | Default           | Extra                       |
++------------------+------------------+------+-----+-------------------+-----------------------------+
+| talkUser_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| talkUser_user_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| talkUser_talk_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| talkUser_comm_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| talkUser_content | varchar(500)     | NO   |     | NULL              |                             |
+| talkUser_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++------------------+------------------+------+-----+-------------------+-----------------------------+
+
+자료공유 글 목록을 저장한 테이블
++---------------+------------------+------+-----+-------------------+-----------------------------+
+| Field         | Type             | Null | Key | Default           | Extra                       |
++---------------+------------------+------+-----+-------------------+-----------------------------+
+| share_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| share_title   | varchar(100)     | NO   |     | NULL              |                             |
+| share_start   | date             | NO   |     | NULL              |                             |
+| share_end     | date             | NO   |     | NULL              |                             |
+| share_content | varchar(500)     | NO   |     | NULL              |                             |
+| share_status  | int(1) unsigned  | NO   |     | NULL              |                             |
+| share_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+| share_comm_no | int(10) unsigned | NO   | MUL | NULL              |                             |
++---------------+------------------+------+-----+-------------------+-----------------------------+
+
+사람들이 참여한 자료공유 글 목록을 저장한 테이블
++--------------------+------------------+------+-----+-------------------+-----------------------------+
+| Field              | Type             | Null | Key | Default           | Extra                       |
++--------------------+------------------+------+-----+-------------------+-----------------------------+
+| shareUser_no       | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| shareUser_user_no  | int(10) unsigned | NO   | MUL | NULL              |                             |
+| shareUser_share_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| shareUser_comm_no  | int(10) unsigned | NO   | MUL | NULL              |                             |
+| shareUser_content  | varchar(300)     | NO   |     | NULL              |                             |
+| shareUser_img_1    | mediumblob       | NO   |     | NULL              |                             |
+| shareUser_img_2    | mediumblob       | YES  |     | NULL              |                             |
+| shareUser_img_3    | mediumblob       | YES  |     | NULL              |                             |
+| shareUser_date     | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++--------------------+------------------+------+-----+-------------------+-----------------------------+
+
+사람들의 포인트 점수를 저장한 테이블
++---------------+------------------+------+-----+-------------------+-----------------------------+
+| Field         | Type             | Null | Key | Default           | Extra                       |
++---------------+------------------+------+-----+-------------------+-----------------------------+
+| point_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| point_user_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| point_score   | int(10) unsigned | NO   |     | NULL              |                             |
+| point_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++---------------+------------------+------+-----+-------------------+-----------------------------+
+
+
+사람들이 제출한 불편, 건의사항을 저장한 테이블
++-------------+------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type             | Null | Key | Default           | Extra                       |
++-------------+------------------+------+-----+-------------------+-----------------------------+
+| pro_no      | int(10) unsigned | NO   | PRI | NULL              | auto_increment              |
+| pro_user_no | int(10) unsigned | NO   | MUL | NULL              |                             |
+| pro_content | varchar(500)     | NO   |     | NULL              |                             |
+| pro_date    | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+------------------+------+-----+-------------------+-----------------------------+
