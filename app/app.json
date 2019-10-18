@@ -5,7 +5,6 @@
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
-      "ios",
       "android",
       "web"
     ],
@@ -23,9 +22,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "description": ""
+    "description": "",
+    "android": {
+      "package": "com.songye.nabi_app"
+    }
   }
 }
