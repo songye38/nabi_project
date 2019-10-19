@@ -9,7 +9,7 @@ import { Icon } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
-export default class HomeScreen extends Component{
+export default class SearchScreen extends Component{
     render(){
         return (
             <ScrollView style={styles.container}>

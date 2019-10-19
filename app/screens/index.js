@@ -5,9 +5,12 @@ import {
 import {createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { Icon } from 'react-native-elements';
 
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
+import SearchScreen from './SearchScreen';
+import ArchiveScreen from './ArchiveScreen';
 import SettingScreen from './SettingScreen';
 import SomethingScreen from './somethingScreen';
 import RegisterScreen from './RegisterScreen';
@@ -35,6 +38,30 @@ const HomeStack = createStackNavigator(
         }),
     }
 );
+const SearchStack = createStackNavigator(
+    {
+        SearchScreen
+    },
+    // if you need.
+    // recommend custom header
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            title: 'Search',
+        }),
+    }
+);
+const ArchiveStack = createStackNavigator(
+    {
+        ArchiveScreen
+    },
+    // if you need.
+    // recommend custom header
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            title: 'Archive',
+        }),
+    }
+);
 const SettingStack = createStackNavigator(
     {
         SettingScreen,
@@ -52,29 +79,38 @@ const SettingStack = createStackNavigator(
 const TabNavigator = createBottomTabNavigator(
     {
         Home: HomeStack,
+        Search: SearchStack,
+        Archive: ArchiveStack,
         Setting: SettingStack,
     },
     {
         defaultNavigationOptions: ({navigation}) => ({
             tabBarIcon: ({focused, horizontal, tintColor}) => {
                 const {routeName} = navigation.state;
-                let icon = "▲";
-
                 if(routeName === 'Home'){
-                    icon = "🌈";
+                    return <Icon name='home' type='antdesign'/>
                 } else if(routeName === 'Setting'){
-                    icon = "🌙"
+                    return <Icon name='ellipsis1' type='antdesign'/>
+                } else if(routeName === 'Search'){
+                    return <Icon name='search1' type='antdesign'/>
+                } else if(routeName === 'Archive'){
+                    return <Icon name='folder1' type='antdesign'/>
                 } 
-
-                // can use react-native-vector-icons
-                // <Icon name={iconName} size={iconSize} color={iconColor} />
-                return <Text style={{color: focused && "#46c3ad" || "#888"}}>{icon}</Text>
             }
         }),
         lazy: false,
         tabBarOptions: {
             activeTintColor: "#46c3ad",
             inactiveTintColor: "#888",
+            style: {          
+              height: 60,
+              borderTopWidth: 0.5,
+              borderTopColor: '#eee',                      
+          },      
+            labelStyle: {
+              fontSize: 11,
+              marginBottom: 5
+          },
         },
     }
 );
