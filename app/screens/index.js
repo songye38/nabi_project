@@ -2,10 +2,11 @@ import React from 'react';
 import {
     Text
 } from 'react-native';
-import {createAppContainer } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
-import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { createMaterialTopTabNavigator, createBottomTabNavigator } from 'react-navigation-tabs' 
 import { Icon } from 'react-native-elements';
+
 
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
@@ -14,6 +15,7 @@ import ArchiveScreen from './ArchiveScreen';
 import SettingScreen from './SettingScreen';
 import SomethingScreen from './somethingScreen';
 import RegisterScreen from './RegisterScreen';
+import PointScreen from './PointScreen';
 
 
 const LoginStack = createStackNavigator(
@@ -28,8 +30,12 @@ const LoginStack = createStackNavigator(
 )
 const HomeStack = createStackNavigator(
     {
-        HomeScreen
+        HomeScreen,
+        PointScreen
     },
+    {
+        initialRouteName: 'HomeScreen',
+     },
     // if you need.
     // recommend custom header
     {
@@ -52,8 +58,12 @@ const SearchStack = createStackNavigator(
 );
 const ArchiveStack = createStackNavigator(
     {
-        ArchiveScreen
+        ArchiveScreen,
+        PointScreen
     },
+    {
+        initialRouteName: 'ArchiveScreen',
+     },
     // if you need.
     // recommend custom header
     {
@@ -76,49 +86,60 @@ const SettingStack = createStackNavigator(
 );
 
 
-const TabNavigator = createBottomTabNavigator(
-    {
+const TabNavigator = createMaterialTopTabNavigator({
         Home: HomeStack,
         Search: SearchStack,
         Archive: ArchiveStack,
         Setting: SettingStack,
-    },
-    {
-        defaultNavigationOptions: ({navigation}) => ({
+}, {
+
+    defaultNavigationOptions: ({navigation}) => ({
             tabBarIcon: ({focused, horizontal, tintColor}) => {
                 const {routeName} = navigation.state;
                 if(routeName === 'Home'){
-                    return <Icon name='home' type='antdesign'/>
+                    return <Icon name='home' type='antdesign' color = {tintColor} size = {20}/>
                 } else if(routeName === 'Setting'){
-                    return <Icon name='ellipsis1' type='antdesign'/>
+                    return <Icon name='ellipsis1' type='antdesign' color = {tintColor} size = {20}/>
                 } else if(routeName === 'Search'){
-                    return <Icon name='search1' type='antdesign'/>
+                    return <Icon name='search1' type='antdesign' color = {tintColor} size = {20}/>
                 } else if(routeName === 'Archive'){
-                    return <Icon name='folder1' type='antdesign'/>
+                    return <Icon name='folder1' type='antdesign' color = {tintColor}size = {20} />
                 } 
             }
         }),
-        lazy: false,
-        tabBarOptions: {
-            activeTintColor: "#46c3ad",
-            inactiveTintColor: "#888",
-            style: {          
-              height: 60,
-              borderTopWidth: 0.5,
-              borderTopColor: '#eee',                      
-          },      
-            labelStyle: {
-              fontSize: 11,
-              marginBottom: 5
-          },
-        },
-    }
-);
+
+  animationEnabled: true,
+  swipeEnabled: true,
+  tabBarPosition: "bottom",
+    lazy: false,
+    tabBarOptions: {
+    showIcon: true,
+    activeTintColor: "#1abc9c",
+    inactiveTintColor: "black",
+    style: {          
+      height: 60,
+      borderTopWidth: 0.5,
+      borderTopColor: 'black',                      
+  },      
+    labelStyle: {
+      fontSize: 10,
+      marginBottom: 5
+  },
+  style: {
+    backgroundColor: 'white',
+  },
+  indicatorStyle : {
+    borderBottomColor: '#1abc9c',
+    borderBottomWidth: 5,
+  }
+},
+});
 
 const AppStack = createStackNavigator(
     {
         LoginScreen: LoginScreen,
         RegisterScreen : RegisterScreen,
+        PointScreen : PointScreen,
         TabNavigator: {
             screen: TabNavigator,
             navigationOptions: ({navigation}) => ({

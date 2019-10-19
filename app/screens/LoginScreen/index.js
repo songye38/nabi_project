@@ -21,63 +21,80 @@ export default class LoginScreen extends Component{
       }
     }
 
+    static navigationOptions = {
+        // title: 'First Page',
+        //Sets Header text of Status Bar
+        headerStyle: {
+          // backgroundColor: '#f4511e',
+          //Sets Header color
+        },
+        headerTintColor: 'white',
+        //Sets Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          //Sets Header text style
+        },
+  };
+
+
      _navigate(){
         this.props.navigation.navigate('RegisterScreen');
     }
 
-    static navigationOptions = {
-        header: null,
-    };
+    // static navigationOptions = {
+    //     header: null,
+    // };
 
     _doLogin(){
-        fetch('https://nabii.run.goorm.io/login', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: this.state.email,
-            pwd: this.state.pwd,
-          }),
-        })
-        .then(response => {
-        if (response.status === 200) {
-          responseJson = response.json();
-          return responseJson;
-        } else {
-          throw new Error('Something went wrong on api server!');
-        }
-      })
-    .then((responseJson) => {
-      if (responseJson.result=='fail'){
-        Alert.alert(
-            "Alert",
-            "아이디, 비밀번호 중 일치하지 않는것이 있습니다.",
-            [
-                {text: 'ok', onPress: () => null},
-            ],
-            { cancelable: false }
-        )
-      }
-      else {
         this.props.navigation.replace('TabNavigator')
-        Alert.alert(
-            "Alert",
-            "로그인되었습니다!",
-            [
-                {text: 'ok', onPress: () => null},
-            ],
-            { cancelable: false }
-        ) 
-      }
-    })
-      .then(response => {
-        console.debug(response);
-        // ...
-      }).catch(error => {
-        console.error(error);
-      });
+    //     fetch('https://nabii.run.goorm.io/login', {
+    //       method: 'POST',
+    //       headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({
+    //         email: this.state.email,
+    //         pwd: this.state.pwd,
+    //       }),
+    //     })
+    //     .then(response => {
+    //     if (response.status === 200) {
+    //       responseJson = response.json();
+    //       return responseJson;
+    //     } else {
+    //       throw new Error('Something went wrong on api server!');
+    //     }
+    //   })
+    // .then((responseJson) => {
+    //   if (responseJson.result=='fail'){
+    //     Alert.alert(
+    //         "Alert",
+    //         "아이디, 비밀번호 중 일치하지 않는것이 있습니다.",
+    //         [
+    //             {text: 'ok', onPress: () => null},
+    //         ],
+    //         { cancelable: false }
+    //     )
+    //   }
+    //   else {
+    //     this.props.navigation.replace('TabNavigator')
+    //     Alert.alert(
+    //         "Alert",
+    //         "로그인되었습니다!",
+    //         [
+    //             {text: 'ok', onPress: () => null},
+    //         ],
+    //         { cancelable: false }
+    //     ) 
+    //   }
+    // })
+    //   .then(response => {
+    //     console.debug(response);
+    //     // ...
+    //   }).catch(error => {
+    //     console.error(error);
+    //   });
     }
 
     render(){

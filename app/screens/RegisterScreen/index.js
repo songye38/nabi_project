@@ -5,7 +5,8 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    Alert
+    Alert,
+    Button
 } from 'react-native';
 
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -23,8 +24,18 @@ export default class RegisterScreen extends Component{
     }
 
     static navigationOptions = {
-        header: null,
-    };
+         title: '회원가입',
+        //Sets Header text of Status Bar
+        headerStyle: {
+          // backgroundColor: '#f4511e',
+          //Sets Header color
+        },
+        headerTintColor: 'black',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+  };
+
 
     _navigate(){
         this.props.navigation.navigate('RegisterScreen');
@@ -79,6 +90,7 @@ export default class RegisterScreen extends Component{
     }
 
     render(){
+        const { navigate } = this.props.navigation;
         return (
             <View style={styles.container}>
                 <View style={styles.titleArea}>
