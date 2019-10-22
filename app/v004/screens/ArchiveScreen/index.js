@@ -141,10 +141,7 @@ export default class ArchiveScreen extends Component{
                         </ScrollView>
                     </View>
                 </View>
-                <TouchableHighlight style={styles.pointSection} onPress={() => navigate('PointScreen',
-                    {
-                      otherParam: 'First Details',
-                    })}>
+                <TouchableHighlight style={styles.pointSection} onPress={() => navigate('PointScreen')}>
                     <Text style={styles.pointText}>
                         {this.state.userPointData[0][2]} 포인트
                     </Text>

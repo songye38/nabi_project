@@ -11,6 +11,7 @@ import {
     Alert
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { StackActions, NavigationActions } from 'react-navigation';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import CustomList from '../../customComponents/CustomList';
 import HomeScreen from '../HomeScreen';
@@ -31,6 +32,21 @@ export default class SearchScreen extends Component{
             onTouchedIndex : 0
         }
     }
+
+    static navigationOptions = {
+        title: '검색',
+        //Sets Header text of Status Bar
+        headerStyle: {
+          // backgroundColor: '#f4511e',
+          //Sets Header color
+        },
+        headerTintColor: 'blak',
+        //Sets Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          //Sets Header text style
+        },
+  };
     handlerCategoryTouch(selectedCategoryTitle,touchedIndex){
         this.setState({
             onTouchedIndex:touchedIndex,
@@ -136,7 +152,7 @@ export default class SearchScreen extends Component{
         return date.format('YYYY년 MM월 DD일 dddd')
     }
     render(){
-
+        const { navigate } = this.props.navigation;
         if(this.state.isLoading){
           return(
             <View style={{flex: 1, padding: 20}}>
@@ -201,7 +217,7 @@ export default class SearchScreen extends Component{
                     {this.state.commListData.map((element, index) => {
                                      return (
                                         <View style = {styles.listContentSection} key={index}>
-                                            <View style= {styles.listImg}></View>
+                                            <TouchableHighlight style= {styles.listImg} onPress={() => navigate('CommMainScreen')}><Text></Text></TouchableHighlight>
                                             <CustomList
                                                 commName = {element[1]}
                                                 count = {element[2]}

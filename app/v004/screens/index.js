@@ -16,6 +16,10 @@ import SettingScreen from './SettingScreen';
 import SomethingScreen from './somethingScreen';
 import RegisterScreen from './RegisterScreen';
 import PointScreen from './PointScreen';
+import MyRankScreen from './MyRankScreen';
+import PointHistoryScreen from './PointHistoryScreen';
+import PointStandardScreen from './PointStandardScreen';
+import CommMainScreen from './CommMainScreen';
 
 
 const LoginStack = createStackNavigator(
@@ -31,13 +35,12 @@ const LoginStack = createStackNavigator(
 const HomeStack = createStackNavigator(
     {
         HomeScreen,
-        PointScreen
+        PointScreen,
+        CommMainScreen
     },
     {
         initialRouteName: 'HomeScreen',
      },
-    // if you need.
-    // recommend custom header
     {
         defaultNavigationOptions: ({navigation}) => ({
             title: 'Home',
@@ -46,26 +49,40 @@ const HomeStack = createStackNavigator(
 );
 const SearchStack = createStackNavigator(
     {
-        SearchScreen
+        SearchScreen,
+        CommMainScreen : CommMainScreen,
     },
-    // if you need.
-    // recommend custom header
     {
-        defaultNavigationOptions: ({navigation}) => ({
-            title: 'Search',
-        }),
+    defaultNavigationOptions: ({navigation}) => ({
+            title : 'Search',
+    }),
     }
 );
+
+SearchStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible;
+  if (navigation.state.routes.length > 1) {
+    navigation.state.routes.map(route => {
+      if (route.routeName === "CommMainScreen") {
+        tabBarVisible = false;
+      } else {
+        tabBarVisible = true;
+      }
+    });
+  }
+  return {
+    tabBarVisible
+  };
+};
 const ArchiveStack = createStackNavigator(
     {
         ArchiveScreen,
-        PointScreen
+        PointScreen,
+        CommMainScreen
     },
     {
         initialRouteName: 'ArchiveScreen',
      },
-    // if you need.
-    // recommend custom header
     {
         defaultNavigationOptions: ({navigation}) => ({
             title: 'Archive',
@@ -85,15 +102,32 @@ const SettingStack = createStackNavigator(
     }
 );
 
+// const PointStack = createStackNavigator(
+//     {
+//         PointScreen,
+//         MyRankScreen,
+//         PointHistoryScreen,
+//         PointStandardScreen,
+//         PointTabNavigator
+//     },
+//     {
+//         defaultNavigationOptions: ({navigation}) => ({
+//             title: 'Point',
+//         }),
+//         initialRouteName: 'MyRankScreen',
 
-const TabNavigator = createMaterialTopTabNavigator({
+//     }
+// );
+
+const TabNavigator = createMaterialTopTabNavigator(
+    {
         Home: HomeStack,
         Search: SearchStack,
         Archive: ArchiveStack,
         Setting: SettingStack,
-}, {
-
-    defaultNavigationOptions: ({navigation}) => ({
+    }, 
+    {
+        defaultNavigationOptions: ({navigation}) => ({
             tabBarIcon: ({focused, horizontal, tintColor}) => {
                 const {routeName} = navigation.state;
                 if(routeName === 'Home'){
@@ -105,12 +139,15 @@ const TabNavigator = createMaterialTopTabNavigator({
                 } else if(routeName === 'Archive'){
                     return <Icon name='folder1' type='antdesign' color = {tintColor}size = {20} />
                 } 
+                else if(routeName === 'Point'){
+                    return <Icon name='folder1' type='antdesign' color = {tintColor}size = {20} />
+                } 
             }
-        }),
+    }),
 
-  animationEnabled: true,
-  swipeEnabled: true,
-  tabBarPosition: "bottom",
+    animationEnabled: true,
+    swipeEnabled: true,
+    tabBarPosition: "bottom",
     lazy: false,
     tabBarOptions: {
     showIcon: true,
@@ -133,19 +170,58 @@ const TabNavigator = createMaterialTopTabNavigator({
     borderBottomWidth: 5,
   },
 },
-});
+}
+);
+// export const PointTabNavigator = createMaterialTopTabNavigator(
+//     {
+//         RankScreen : {
+//             screen : MyRankScreen,
+//             navigationOptions : {
+//                 header : null,
+//                 title : '나의 순위'
+//             }
+//         },
+//         HistoryScreen : {
+//             screen : PointHistoryScreen,
+//             navigationOptions : {
+//                 header : null,
+//                 title : '포인트 이력'
+//             }
+//         },
+//         StandardScreen : {
+//             screen : PointStandardScreen,
+//             navigationOptions : {
+//                 header : null,
+//                 title : '점수 및 기준'
+//             }
+//         }
+//     },
+//     {
+//         tabBarPosition : 'top',
+//         tabBarOptions : {
+//             activeTintColor : 'red'
+//         }
+//     }
+// );
+
 
 const AppStack = createStackNavigator(
     {
         LoginScreen: LoginScreen,
         RegisterScreen : RegisterScreen,
-        PointScreen : PointScreen,
+        // PointScreen : PointScreen,
         TabNavigator: {
             screen: TabNavigator,
             navigationOptions: ({navigation}) => ({
                 header: null,
             }),
         },
+        // PointTabNavigator: {
+        //     screen: PointTabNavigator,
+        //     navigationOptions: ({navigation}) => ({
+        //         header: null,
+        //     }),
+        // },
     }
 );
 
