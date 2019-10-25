@@ -23,6 +23,8 @@ import CommMainScreen from './CommMainScreen';
 import CustomList from '../customComponents/CustomList';
 import CommOffAction from '../customComponents/CommOffAction';
 import CommOnAction from '../customComponents/CommOnAction';
+import CommTalk from '../customComponents/CommTalk';
+import CommShare from '../customComponents/CommShare';
 
 
 const LoginStack = createStackNavigator(
@@ -56,7 +58,8 @@ const SearchStack = createStackNavigator(
         CommMainScreen : CommMainScreen,
         CommOffAction : CommOffAction,
         CommOnAction : CommOnAction,
-        CustomList : CustomList,
+        CommTalk : CommTalk,
+        CommShare : CommShare,
     },
     {
     defaultNavigationOptions: ({navigation}) => ({
@@ -69,7 +72,7 @@ SearchStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible;
   if (navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
-      if (route.routeName === "CommMainScreen" || route.routeName === "CommOffAction" || route.routeName === "CommOnAction") {
+      if (route.routeName === "CommMainScreen" || route.routeName === "CommOffAction" || route.routeName === "CommOnAction" || route.routeName === "CommTalk" || route.routeName === "CommShare") {
         tabBarVisible = false;
       } else {
         tabBarVisible = true;

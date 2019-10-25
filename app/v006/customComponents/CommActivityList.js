@@ -12,6 +12,8 @@ import ScrollableTabView, { DefaultTabBar, ScrollableTabBar } from 'react-native
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import CommOffAction from './CommOffAction';
 import CommOnAction from './CommOnAction';
+import CommTalk from './CommTalk';
+import CommShare from './CommShare';
 
 
 export default class CommActivityList extends Component{
@@ -35,7 +37,7 @@ export default class CommActivityList extends Component{
                 <View style={styles.listMainContent}>
                     <View style = {styles.contentSection}>
                         <View style = {styles.categorySection}>
-                            <Icon name='users' type='feather' size = {28} color = 'black'/>
+                            <Icon name='users' type='feather' size = {28}/>
                         </View>
                         <View style = {styles.textSection}>
                             <View style = {styles.subTextSection}>
@@ -49,43 +51,7 @@ export default class CommActivityList extends Component{
                             </TouchableHighlight>
                         </View>
                     </View>  
-                </View>  
-                <View style={styles.listMainContent}>
-                    <View style = {styles.contentSection}>
-                        <View style = {styles.categorySection}>
-                            <Icon name='users' type='feather' size = {28} color = 'black'/>
-                        </View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.subTextSection}>
-                                <Text style = {styles.subText}>온라인행동</Text>
-                                <Text style = {styles.subText}>2019.9.12 목요일</Text>
-                                <Text style = {styles.subText}>오후 2시</Text>
-                                <Text style = {styles.subText}>광화문</Text>
-                            </View>
-                            <View style = {styles.mainTextSection} onPress={() => navigate('CommOnAction')} underlayColor='white'>
-                                <Text style = {{fontSize : wp('4')}}>비대위 설립을 알리는 기자회견이 있습니다.</Text>
-                            </View>
-                        </View>
-                    </View>  
-                </View>  
-                <View style={styles.listMainContent}>
-                    <View style = {styles.contentSection}>
-                        <View style = {styles.categorySection}>
-                            <Icon name='users' type='feather' size = {28} color = 'black'/>
-                        </View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.subTextSection}>
-                                <Text style = {styles.subText}>기자회견</Text>
-                                <Text style = {styles.subText}>2019.9.12 목요일</Text>
-                                <Text style = {styles.subText}>오후 2시</Text>
-                                <Text style = {styles.subText}>광화문</Text>
-                            </View>
-                            <View style = {styles.mainTextSection}>
-                                <Text style = {{fontSize : wp('4')}}>비대위 설립을 알리는 기자회견이 있습니다.</Text>
-                            </View>
-                        </View>
-                    </View>  
-                </View> 
+                </View>    
                 <View style={styles.listMainContent}>
                     <View style = {styles.contentSection}>
                         <View style = {styles.categorySection}>
@@ -93,7 +59,7 @@ export default class CommActivityList extends Component{
                         </View>
                         <View style = {styles.textSection}>
                             <View style = {styles.subTextSection}>
-                                <Text style = {styles.subText}>기자회견</Text>
+                                <Text style = {styles.subText}>국민청원</Text>
                                 <Text style = {styles.subText}>2019.9.12 목요일</Text>
                                 <Text style = {styles.subText}>오후 2시</Text>
                                 <Text style = {styles.subText}>광화문</Text>
@@ -111,12 +77,12 @@ export default class CommActivityList extends Component{
                         </View>
                         <View style = {styles.textSection}>
                             <View style = {styles.subTextSection}>
-                                <Text style = {styles.subText}>기자회견</Text>
+                                <Text style = {styles.subText}>대화</Text>
                                 <Text style = {styles.subText}>2019.9.12 목요일</Text>
                                 <Text style = {styles.subText}>오후 2시</Text>
                                 <Text style = {styles.subText}>광화문</Text>
                             </View>
-                            <TouchableHighlight style = {styles.mainTextSection}>
+                            <TouchableHighlight style = {styles.mainTextSection} onPress={() => navigate('CommTalk')} underlayColor='white'>
                                 <Text style = {{fontSize : wp('4')}}>비대위 설립을 알리는 기자회견이 있습니다.</Text>
                             </TouchableHighlight>
                         </View>
@@ -129,12 +95,12 @@ export default class CommActivityList extends Component{
                         </View>
                         <View style = {styles.textSection}>
                             <View style = {styles.subTextSection}>
-                                <Text style = {styles.subText}>기자회견</Text>
+                                <Text style = {styles.subText}>자료공유</Text>
                                 <Text style = {styles.subText}>2019.9.12 목요일</Text>
                                 <Text style = {styles.subText}>오후 2시</Text>
                                 <Text style = {styles.subText}>광화문</Text>
                             </View>
-                            <TouchableHighlight style = {styles.mainTextSection}>
+                            <TouchableHighlight style = {styles.mainTextSection} onPress={() => navigate('CommShare')} underlayColor='white'>
                                 <Text style = {{fontSize : wp('4')}}>비대위 설립을 알리는 기자회견이 있습니다.</Text>
                             </TouchableHighlight>
                         </View>
@@ -152,7 +118,7 @@ export default class CommActivityList extends Component{
                                 <Text style = {styles.subText}>오후 2시</Text>
                                 <Text style = {styles.subText}>광화문</Text>
                             </View>
-                            <TouchableHighlight style = {styles.mainTextSection}>
+                            <TouchableHighlight style = {styles.mainTextSection} onPress={() => navigate('CommOffAction')} underlayColor='white'>
                                 <Text style = {{fontSize : wp('4')}}>비대위 설립을 알리는 기자회견이 있습니다.</Text>
                             </TouchableHighlight>
                         </View>
