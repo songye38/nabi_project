@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         borderColor : 'gray',
         borderLeftWidth : wp(0.2),
     },
-        listSection : {
+    listSection : {
         width : wp('95%'),
         flex : 1,
     },

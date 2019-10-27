@@ -54,7 +54,6 @@ export default class HomeScreen extends Component{
         const { navigate } = this.props.navigation;
         return (
             <View style={styles.container}>
-                <TouchableHighlight style={styles.pointBox} onPress={() => navigate('PointScreen')}><Text style={styles.pointText}>{this.state.userPointData[0][2]} 포인트</Text></TouchableHighlight>
                 <View style={styles.title}><Text style = {styles.titleText}>가입</Text></View>
                 <View style={{height: wp('35%'),paddingBottom: wp('5%')}}>
                 <ScrollView style={styles.commList} horizontal={true} indicatorStyle = {'white'}>
@@ -71,45 +70,60 @@ export default class HomeScreen extends Component{
             </ScrollView>
             </View>
             <View style={styles.title}><Text style = {styles.titleText}>최신 소식</Text></View>
-            <View style={{flex : 1}}>
-                <ScrollView style={styles.news} indicatorStyle = {'white'} directionalLockEnabled = {'true'} showsHorizontalScrollIndicator = {'false'}>
-                <View style={styles.contentsList}>
-                    <View style={styles.commImg_small}></View>
-                    <View style={styles.contents}>
-                        <Text style ={styles.commTitle_column}>비대위이름</Text>
-                        <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+            <View style = {{flex : 1}}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.contentsList}>
+                            <View style={styles.commImg_small}></View>
+                            <View style={styles.contents}>
+                                <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                            </View>
                     </View>
-            </View>
-            <View style={styles.contentsList}>
-                    <View style={styles.commImg_small}></View>
-                    <View style={styles.contents}>
-                        <Text style ={styles.commTitle_column}>비대위이름</Text>
-                        <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                    <View style={styles.contentsList}>
+                            <View style={styles.commImg_small}></View>
+                            <View style={styles.contents}>
+                                <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                            </View>
                     </View>
-            </View>
-            <View style={styles.contentsList}>
-                    <View style={styles.commImg_small}></View>
-                    <View style={styles.contents}>
-                        <Text style ={styles.commTitle_column}>비대위이름</Text>
-                        <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                    <View style={styles.contentsList}>
+                            <View style={styles.commImg_small}></View>
+                            <View style={styles.contents}>
+                                <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                            </View>
                     </View>
-            </View>
-            <View style={styles.contentsList}>
-                    <View style={styles.commImg_small}></View>
-                    <View style={styles.contents}>
-                        <Text style ={styles.commTitle_column}>비대위이름</Text>
-                        <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                    <View style={styles.contentsList}>
+                            <View style={styles.commImg_small}></View>
+                            <View style={styles.contents}>
+                                <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                            </View>
                     </View>
-            </View>
-            <View style={styles.contentsList}>
-                    <View style={styles.commImg_small}></View>
-                    <View style={styles.contents}>
-                        <Text style ={styles.commTitle_column}>비대위이름</Text>
-                        <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                    <View style={styles.contentsList}>
+                            <View style={styles.commImg_small}></View>
+                            <View style={styles.contents}>
+                                <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                            </View>
                     </View>
+                    <View style={styles.contentsList}>
+                            <View style={styles.commImg_small}></View>
+                            <View style={styles.contents}>
+                                <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                            </View>
+                    </View>
+                    <View style={styles.contentsList}>
+                            <View style={styles.commImg_small}></View>
+                            <View style={styles.contents}>
+                                <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                            </View>
+                    </View>
+                </ScrollView>
             </View>
-            </ScrollView>
-            </View>
+            <TouchableHighlight style={styles.pointBox} onPress={() => navigate('PointScreen')}><Text style={styles.pointText}>{this.state.userPointData[0][2]} 포인트</Text></TouchableHighlight>
             </View>
         );
     }
@@ -215,4 +229,5 @@ const styles = StyleSheet.create({
 
     }
 })
+
 
