@@ -10,6 +10,7 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import { Icon, Avatar } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import LoginScreen from '../LoginScreen';
 
 export default class SettingScreen extends Component{
     _navigate(){
@@ -19,10 +20,10 @@ export default class SettingScreen extends Component{
     _checkLogout(){
         Alert.alert(
             "Alert",
-            "Are you sure?",
+            "정말 로그아웃 하시겠습니까?",
             [
-                {text: 'ok', onPress: this._logout.bind(this)},
-                {text: 'cancel', onPress: () => null},
+                {text: '취소', onPress: () => null},
+                {text: '확인', onPress: this._logout.bind(this)},
             ],
             { cancelable: true }
         )
@@ -61,9 +62,11 @@ export default class SettingScreen extends Component{
                     <Text style={styles.emailText}>
                         vsongyev@hanmail.net
                     </Text>
-                    <Text style={styles.logoutText}>
-                        로그아웃
-                    </Text>
+                <TouchableOpacity 
+                    style={styles.wrapButton}
+                    onPress={this._checkLogout.bind(this)}>
+                    <Text style={styles.logoutText}>로그아웃</Text>
+                </TouchableOpacity>
                 </View>
                 <View style={styles.oneColumnSection}>
                     <Text style={styles.pwdText}>
