@@ -70,17 +70,20 @@ const SearchStack = createStackNavigator(
 
 SearchStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible;
+  let swipeEnabled;
   if (navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
       if (route.routeName === "CommMainScreen" || route.routeName === "CommOffAction" || route.routeName === "CommOnAction" || route.routeName === "CommTalk" || route.routeName === "CommShare") {
         tabBarVisible = false;
+        swipeEnabled =  false;
       } else {
         tabBarVisible = true;
+        swipeEnabled =  true;
       }
     });
   }
   return {
-    tabBarVisible
+    tabBarVisible,swipeEnabled
   };
 };
 const ArchiveStack = createStackNavigator(

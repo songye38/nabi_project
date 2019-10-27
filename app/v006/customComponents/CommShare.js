@@ -8,9 +8,13 @@ import {
     TextInput,
     Image,
     ImageBackground,
+    Button
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import Modal from 'react-native-modal';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Krunal from '../assets/test.jpg';
+
 
 export default class CommShare extends Component{
 
@@ -34,14 +38,33 @@ export default class CommShare extends Component{
           fontWeight: 'bold',
           //Sets Header text style
         },
-  };
-      //<Text style={styles.titleText} numberOfLines={1}>{this.props.commName}</Text>
+     };
+
     constructor(props){
         super(props);
         this.state ={ 
             keyword : 'all',
+            modalVisible : false,
         }
-      }
+    }
+
+    showModal = () => {
+    this.setState({
+      modalVisible: true
+    });
+    setTimeout(() => {
+      this.setState({
+        modalVisible: false
+      })
+      }, 700);
+  }
+
+    renderModalContent = () => (
+    <View style={styles.content}>
+      <Text style={styles.contentTitle}>Hi 👋!</Text>
+    </View>
+  );
+
 
     render(){
         return (
@@ -73,7 +96,9 @@ export default class CommShare extends Component{
                         <Icon name='down' type='antdesign' size = {15}/>
                     </View>
                 </View>
-                <ScrollView style = {styles.commentSection} showsVerticalScrollIndicator={false}>
+                <ScrollView 
+                    style = {styles.commentSection}
+                    showsVerticalScrollIndicator={false}>
                     <View style = {styles.commentList}>
                         <View style = {styles.profileSection}>
                             <View style = {styles.img}/>
@@ -94,17 +119,17 @@ export default class CommShare extends Component{
                             </View>
                             <View style = {styles.imgSection}>
                                 <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
+                                    <TouchableHighlight onPress={() => this.showModal()} underlayColor='#eee'>
                                         <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
                                     </TouchableHighlight>
                                 </ImageBackground>
                                 <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
+                                    <TouchableHighlight onPress={() => this.showModal()} underlayColor='#eee'>
                                         <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
                                     </TouchableHighlight>
                                 </ImageBackground>
                                 <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
+                                    <TouchableHighlight onPress={() => this.showModal()} underlayColor='#eee'>
                                         <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
                                     </TouchableHighlight>
                                 </ImageBackground>
@@ -445,6 +470,13 @@ export default class CommShare extends Component{
                         </View>
                     </View>
                 </ScrollView>
+                <Modal
+                  isVisible={this.state.modalVisible == true}
+                  onSwipeComplete={() => this.setState({modalVisible: false})}
+                  swipeDirection={'up'}
+                  style={styles.bottomModal}>
+                  {this.renderModalContent()}
+                </Modal>
             </View>                        
         );
     }
@@ -522,7 +554,23 @@ const styles = StyleSheet.create({
         flex : 1,
         flexDirection : 'row',
         marginTop : wp('3'),
-    }
+    },
+    content: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  contentTitle: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  bottomModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
 })
 
 
