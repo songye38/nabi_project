@@ -40,8 +40,8 @@ const LoginStack = createStackNavigator(
 const HomeStack = createStackNavigator(
     {
         HomeScreen,
-        PointScreen,
-        CommMainScreen
+        PointScreen : PointScreen,
+        CommMainScreen,
     },
     {
         initialRouteName: 'HomeScreen',
@@ -52,6 +52,24 @@ const HomeStack = createStackNavigator(
         }),
     }
 );
+HomeStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible;
+  let swipeEnabled;
+  if (navigation.state.routes.length > 1) {
+    navigation.state.routes.map(route => {
+      if (route.routeName === "PointScreen") {
+        tabBarVisible = false;
+        swipeEnabled =  false;
+      } else {
+        tabBarVisible = true;
+        swipeEnabled =  true;
+      }
+    });
+  }
+  return {
+    tabBarVisible,swipeEnabled
+  };
+};
 const SearchStack = createStackNavigator(
     {
         SearchScreen,
