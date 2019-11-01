@@ -153,6 +153,14 @@ export default class SearchScreen extends Component{
         const date = dayjs(param)
         return date.format('YYYY년 MM월 DD일 dddd')
     }
+    navigateToCommMain(commId,commName){
+        const { navigate } = this.props.navigation;
+        return navigate('CommMainScreen',{
+                  commName : commName,
+                  commId : commId,
+                })
+    }
+
     render(){
         const { navigate } = this.props.navigation;
         if(this.state.isLoading){
@@ -219,7 +227,7 @@ export default class SearchScreen extends Component{
                     {this.state.commListData.map((element, index) => {
                                      return (
                                         <View style = {styles.listContentSection} key={index}>
-                                            <TouchableHighlight style= {styles.listImg} onPress={() => navigate('CommMainScreen')}>
+                                            <TouchableHighlight style= {styles.listImg} onPress={() => this.navigateToCommMain(element._id.$oid,element.name)} underlayColor='white'>
                                             <Text></Text>
                                             </TouchableHighlight>
                                             <CustomList

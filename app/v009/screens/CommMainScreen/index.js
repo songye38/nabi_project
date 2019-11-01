@@ -48,18 +48,21 @@ export default class CommMainScreen extends Component{
         const onGoing = `https://songye.run.goorm.io/${commId}/onGoing`;
         const participate = `https://songye.run.goorm.io/${commId}/participate/${this.state.userId}`;
         const archive = `https://songye.run.goorm.io/${commId}/archive/${this.state.userId}`;
+        const comm = `https://songye.run.goorm.io/search/${commId}`;
 
-        Promise.all([fetch(onGoing), fetch(participate),fetch(archive)])
-          .then(([res1, res2,res3]) => { 
-             return Promise.all([res1.json(), res2.json(),res3.json()]) 
+        Promise.all([fetch(onGoing), fetch(participate),fetch(archive),fetch(comm)])
+          .then(([res1, res2,res3,res4]) => { 
+             return Promise.all([res1.json(), res2.json(),res3.json(),res4.json()]) 
           })
-          .then(([res1, res2,res3]) => {
+          .then(([res1, res2,res3,res4]) => {
             this.setState({
-                isLoading : false,
                 onGoingResult: res1.value,
                 participateResult : res2.value,
-                archiveResult : res3.value
+                archiveResult : res3.value,
+                commInfo : res4.value,
+                isLoading : false
             });
+            console.log(this.state.commInfo);
             this.setState({
               goingLen : Object.keys(this.state.onGoingResult).length,
               takeLen : Object.keys(this.state.participateResult).length,
@@ -81,6 +84,13 @@ export default class CommMainScreen extends Component{
     }
 
     render(){
+      if(this.state.isLoading){
+          return(
+            <View style={{flex: 1, padding: 20}}>
+              <ActivityIndicator/>
+            </View>
+          )
+        }
       const { navigation } = this.props;
         return(
           <View style={{flexDirection:'column',flex:1}}>
@@ -88,17 +98,17 @@ export default class CommMainScreen extends Component{
               <View style = {styles.infoCommImg}></View>
               <View style = {styles.mainContentSection}>
                   <View style = {{paddingBottom : wp('3.5')}}>
-                    <Text style = {{fontSize:wp('5.5'), fontWeight : 'bold'}}>{JSON.stringify(navigation.getParam('commName', 'NO-ID'))}</Text>
+                    <Text style = {{fontSize:wp('5.5'), fontWeight : 'bold'}}>{this.state.commInfo[0].name}</Text>
                   </View>
                   <View style = {{paddingBottom : wp('1')}}>
                     <Text>채용비리 근절을 위해 만들어진 비대위입니다.</Text>
                   </View>
                   <View style = {{flexDirection : 'row'}}>
                     <View>
-                      <Text style = {{fontSize : wp('3'), paddingRight : wp('2')}}>참여인원 : {JSON.stringify(navigation.getParam('commCount', 'NO-ID'))}</Text>
+                      <Text style = {{fontSize : wp('3'), paddingRight : wp('2')}}>참여인원 : {this.state.commInfo[0].count}</Text>
                     </View>
                     <View>
-                      <Text style = {{fontSize : wp('3')}}>시작날짜 : {JSON.stringify(navigation.getParam('commDate', 'NO-ID'))}</Text>
+                      <Text style = {{fontSize : wp('3')}}>시작날짜 : {this.state.commInfo[0].date}</Text>
                     </View>
                   </View>
                   <View style = {styles.participateSection}>
@@ -123,7 +133,6 @@ export default class CommMainScreen extends Component{
                       <CommActivityList dataset = {this.state.onGoingResult} key={'1'} tabLabel={`진행중 (${this.state.goingLen})`} style={{flex:1,backgroundColor:'red'}} navigation={this.props.navigation}  type ='ongoing' isActive={this.state.isSceneOneVisible}/>
                       <CommActivityList dataset = {this.state.participateResult} key={'2'} tabLabel={`참여 (${this.state.takeLen})`} style={{flex:1,backgroundColor:'red'}} navigation={this.props.navigation} type = 'take' isActive={this.state.isSceneTwoVisible}/>
                       <CommActivityList dataset = {this.state.archiveResult} key={'3'} tabLabel={`아카이브 (${this.state.archiveLen})`} style={{flex:1,backgroundColor:'red'}} navigation={this.props.navigation} type = 'archive' isActive={this.state.isSceneThreeVisible}/>
-                      <CommActivityList key={'4'} tabLabel={'정보(2)'} style={{flex:1,backgroundColor:'red'}} navigation={this.props.navigation}/>
                 </ScrollableTabView>
             </View>
           </View>

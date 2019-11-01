@@ -12,6 +12,7 @@ import {
 import { Icon } from 'react-native-elements';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import CommMainScreen from '../CommMainScreen';
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 dayjs.locale('ko')
@@ -23,13 +24,11 @@ export default class ArchiveScreen extends Component{
         super(props);
         this.state ={ 
             isLoading: true,
-            userNo : 1
+            userId : '5db7d2513c6cbc15d538be46',
         }
     }
 
     static navigationOptions = {
-        // title: 'First Page',
-        //Sets Header text of Status Bar
         headerStyle: {
           // backgroundColor: '#f4511e',
           //Sets Header color
@@ -43,8 +42,8 @@ export default class ArchiveScreen extends Component{
   };
 
     componentDidMount() {
-        const url1 = "https://songye.run.goorm.io/actSearch/all/all/all/5db7d2513c6cbc15d538be46";
-        const url2 = "https://songye.run.goorm.io/point/rank/5db7d2513c6cbc15d538be46";
+        const url1 = `https://songye.run.goorm.io/actSearch/all/all/all/${this.state.userId}`;
+        const url2 = `https://songye.run.goorm.io/point/rank/${this.state.userId}`;
         Promise.all([fetch(url1), fetch(url2)])
 
           .then(([res1, res2]) => { 
@@ -56,6 +55,7 @@ export default class ArchiveScreen extends Component{
                 participateList : res1.value[0]['pointList'],
                 userPointData : res2.value
             });
+            console.log(this.state.participateList);
           });
     }
     switchMessage(param){
@@ -87,6 +87,14 @@ export default class ArchiveScreen extends Component{
         console.log(param);
         const date = dayjs(param)
         return date.format('YYYY년 MM월 DD일 dddd HH시 mm분')
+    }
+
+    navigateToCommMain(commId,commName){
+        const { navigate } = this.props.navigation;
+        return navigate('CommMainScreen',{
+                  commName : commName,
+                  commId : commId,
+                })
     }
 
     render(){
@@ -137,7 +145,7 @@ export default class ArchiveScreen extends Component{
                             {this.state.participateList.map((element, index) => {
                                      return (
                                         <View style = {styles.listContentSection} key={index}>
-                                            <View style= {styles.listImg}></View>
+                                            <TouchableHighlight style= {styles.listImg} onPress={() => this.navigateToCommMain(element.comm_id.$oid,element.comm_name)} underlayColor='white'><Text></Text></TouchableHighlight>
                                             <View style={styles.listMainContent}>
                                                <View style = {styles.title}>
                                                     <Text style={styles.dateText}>{this.fotmattingDate(element.date.$date)}</Text>

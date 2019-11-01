@@ -12,6 +12,7 @@ import {
 import { Icon } from 'react-native-elements';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import CommMainScreen from '../CommMainScreen';
 
 
 export default class HomeScreen extends Component{
@@ -38,11 +39,13 @@ export default class HomeScreen extends Component{
           });
         }
 
-    
-
-    // _navigate(){
-    //     this.props.navigation.navigate('SearchScreen');
-    // }
+    navigateToCommMain(commId,commName){
+        const { navigate } = this.props.navigation;
+        return navigate('CommMainScreen',{
+                  commName : commName,
+                  commId : commId,
+                })
+    }
 
     render(){
 
@@ -61,9 +64,9 @@ export default class HomeScreen extends Component{
                 <ScrollView style={styles.commList} horizontal={true} indicatorStyle = {'white'}>
                        {this.state.commListData.map((prop, index) => {
                          return (
-                            <View style={styles.commImg_big} key={index}>
+                            <TouchableHighlight style={styles.commImg_big} key={index} onPress={() => this.navigateToCommMain(prop._id.$oid,prop.name)} underlayColor='white'>
                                 <Text style={styles.commTitle} numberOfLines={1}>{prop.name}</Text>
-                            </View>
+                            </TouchableHighlight>
                          );
                       })}
                        <TouchableHighlight style={styles.addButton} onPress={() => navigate('SearchScreen')} underlayColor='#eee'>

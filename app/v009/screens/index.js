@@ -41,7 +41,7 @@ const HomeStack = createStackNavigator(
     {
         HomeScreen,
         PointScreen : PointScreen,
-        CommMainScreen,
+        CommMainScreen : CommMainScreen
     },
     {
         initialRouteName: 'HomeScreen',
@@ -57,7 +57,7 @@ HomeStack.navigationOptions = ({ navigation }) => {
   let swipeEnabled;
   if (navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
-      if (route.routeName === "PointScreen") {
+      if (route.routeName === "PointScreen" || route.routeName === "CommMainScreen") {
         tabBarVisible = false;
         swipeEnabled =  false;
       } else {
@@ -108,7 +108,7 @@ const ArchiveStack = createStackNavigator(
     {
         ArchiveScreen,
         PointScreen : PointScreen,
-        CommMainScreen,
+        CommMainScreen : CommMainScreen,
         MyRankScreen : MyRankScreen,
         PointHistoryScreen : PointHistoryScreen,
         PointStandardScreen : PointStandardScreen,
@@ -128,7 +128,7 @@ ArchiveStack.navigationOptions = ({ navigation }) => {
   let swipeEnabled;
   if (navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
-      if (route.routeName === "PointScreen") {
+      if (route.routeName === "PointScreen" || route.routeName === "CommMainScreen") {
         tabBarVisible = false;
         swipeEnabled =  false;
       } else {
