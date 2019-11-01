@@ -13,6 +13,11 @@ import { Icon } from 'react-native-elements';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import CommMainScreen from '../CommMainScreen';
+import CommOffAction from '../../customComponents/CommOffAction';
+import CommOnAction from '../../customComponents/CommOnAction';
+import CommTalk from '../../customComponents/CommTalk';
+import CommShare from '../../customComponents/CommShare';
+
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 dayjs.locale('ko')
@@ -55,7 +60,6 @@ export default class ArchiveScreen extends Component{
                 participateList : res1.value[0]['pointList'],
                 userPointData : res2.value
             });
-            console.log(this.state.participateList);
           });
     }
     switchMessage(param){
@@ -80,7 +84,6 @@ export default class ArchiveScreen extends Component{
             return '참석을 신청하였습니다.';
         case 'del_off':
             return "참석을 취소하였습니다."
-
       }
     }
     fotmattingDate(param){
@@ -95,6 +98,31 @@ export default class ArchiveScreen extends Component{
                   commName : commName,
                   commId : commId,
                 })
+    }
+    navigateToAction(type,commId,actionId){
+        const { navigate } = this.props.navigation;
+        switch(type) {
+        case 'join_comm':
+          return navigate('CommMainScreen',{commId : commId})
+        case 'del_comm':
+            return navigate('CommMainScreen',{commId : commId})
+        case 'join_talk':
+            return navigate('CommTalk',{actionId : actionId,commId : commId})
+        case 'edit_talk':
+            return navigate('CommTalk',{actionId : actionId,commId : commId})
+        case 'del_talk':
+            return navigate('CommTalk',{actionId : actionId,commId : commId})
+        case 'join_share':
+            return navigate('CommShare',{actionId : actionId,commId : commId})
+        case 'edit_share':
+            return navigate('CommShare',{actionId : actionId,commId : commId})
+        case 'del_share':
+            return navigate('CommShare',{actionId : actionId,commId : commId})
+        case 'join_off':
+            return navigate('CommOffAction',{actionId : actionId,commId : commId})
+        case 'del_off':
+            return navigate('CommOffAction',{actionId : actionId,commId : commId})
+      }
     }
 
     render(){
@@ -150,11 +178,11 @@ export default class ArchiveScreen extends Component{
                                                <View style = {styles.title}>
                                                     <Text style={styles.dateText}>{this.fotmattingDate(element.date.$date)}</Text>
                                                 </View>  
-                                                <View style = {styles.explain}>
+                                                <TouchableHighlight style = {styles.explain} onPress={() => this.navigateToAction(element.type,element.comm_id.$oid,element.action_id)} underlayColor='white'>
                                                     <Text style={styles.explainText}>
                                                         {this.switchMessage(element.type)}
                                                     </Text>
-                                                </View>
+                                                </TouchableHighlight>
                                             </View>
                                         </View>                             
                                     );

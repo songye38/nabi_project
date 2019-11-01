@@ -112,6 +112,10 @@ const ArchiveStack = createStackNavigator(
         MyRankScreen : MyRankScreen,
         PointHistoryScreen : PointHistoryScreen,
         PointStandardScreen : PointStandardScreen,
+        CommOffAction : CommOffAction,
+        CommTalk : CommTalk,
+        CommShare : CommShare
+
     },
     {
         initialRouteName: 'ArchiveScreen',

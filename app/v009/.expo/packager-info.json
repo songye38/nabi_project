@@ -3,7 +3,7 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerNgrokUrl": "https://ac-cn5.songye.v009.exp.direct",
+  "packagerNgrokUrl": "https://packager.ac-cn5.songye.v009.exp.direct",
+  "ngrokPid": 26769
 }

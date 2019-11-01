@@ -15,279 +15,118 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 export default class PointHistoryScreen extends Component{
 
+    constructor(props){
+        super(props);
+        this.state ={ isLoading: true}
+    }
+
+    componentDidMount() {
+        const url = "https://songye.run.goorm.io/point/rank/5db7d2513c6cbc15d538be46";
+        Promise.all([fetch(url)])
+
+          .then(([res]) => { 
+             return Promise.all([res.json()]) 
+          })
+          .then(([res]) => {
+            this.setState({
+                isLoading : false,
+                userPointData : res.value,
+            });
+          });
+        }
+    selectContent(type){
+        switch(type) {
+        case 'join_comm':
+          return '비대위에 가입하였습니다.'
+        case 'del_comm':
+            return '비대위 가입을 취소하였습니다.'
+        case 'join_talk':
+            return '댓글을 달았습니다.'
+        case 'edit_talk':
+            return '댓글을 수정하였습니다.'
+        case 'del_talk':
+            return '댓글을 삭제하였습니다.'
+        case 'join_share':
+            return '자료를 공유하였습니다.'
+        case 'edit_share':
+            return '자료를 수정하였습니다.'
+        case 'del_share':
+            return '자료를 삭제하였습니다.'
+        case 'join_off':
+            return '모임에 참여하였습니다.'
+        case 'del_off':
+            return '모임을 취소하였습니다.'
+      }
+
+    }
+    selectPoint(type){
+        switch(type) {
+        case 'join_comm':
+          return '+10'
+        case 'del_comm':
+            return '-10'
+        case 'join_talk':
+            return '+3'
+        case 'edit_talk':
+            return "+0"
+        case 'del_talk':
+            return "-3"
+        case 'join_share':
+            return "+3"
+        case 'edit_share':
+            return "+0"
+        case 'del_share':
+            return "-3"
+        case 'join_off':
+            return "+5"
+        case 'del_off':
+            return "-5"
+      }
+    }
     render(){
+        if(this.state.isLoading){
+          return(
+            <View style={{flex: 1, padding: 20}}>
+              <ActivityIndicator/>
+            </View>
+          )
+        }
     
        return(
             <View style = {styles.container}>
                 <View style = {styles.pointSection}>
                     <Text style = {styles.mainPointText}>
-                        342 
+                        {this.state.userPointData[0].score}
                     </Text>
                     <Text style = {styles.subText}>
                         포인트
                     </Text>
                 </View>
                 <ScrollView style = {styles.historySection} indicatorStyle = {'white'}>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
+                    {this.state.userPointData[0].pointList.map((element, index) => {
+                     return (
+                        <View style = {styles.listSection} key = {index}>
+                            <View style = {styles.commImg}></View>
+                            <View style = {styles.textSection}>
+                                <View style = {styles.dateSection} >
+                                    <Text style = {styles.dateText}>
+                                        {element.comm_name}
+                                    </Text>
+                                </View>
+                                <View style = {styles.titleSection}>
+                                    <Text style = {styles.titleText}>
+                                        {this.selectContent(element.type)}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.pointSection}>
+                                <Text style = {styles.pointText}>
+                                     {this.selectPoint(element.type)}
                                 </Text>
                             </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
-                    <View style = {styles.listSection}>
-                        <View style = {styles.commImg}></View>
-                        <View style = {styles.textSection}>
-                            <View style = {styles.dateSection} >
-                                <Text style = {styles.dateText}>
-                                    2019.08.08
-                                </Text>
-                            </View>
-                            <View style = {styles.titleSection}>
-                                <Text style = {styles.titleText}>
-                                    비대위에 가입하였습니다.
-                                </Text>
-                            </View>
-                        </View>
-                        <View style = {styles.pointSection}>
-                            <Text style = {styles.pointText}>
-                                 +5
-                            </Text>
-                        </View>
-                    </View>
+                        </View>                            
+                    );
+                  })}
                 </ScrollView>
             </View>
         )

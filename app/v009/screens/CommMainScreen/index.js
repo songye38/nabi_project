@@ -62,7 +62,6 @@ export default class CommMainScreen extends Component{
                 commInfo : res4.value,
                 isLoading : false
             });
-            console.log(this.state.commInfo);
             this.setState({
               goingLen : Object.keys(this.state.onGoingResult).length,
               takeLen : Object.keys(this.state.participateResult).length,
