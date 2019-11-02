@@ -43,6 +43,7 @@ const HomeStack = createStackNavigator(
         PointScreen : PointScreen,
         CommMainScreen : CommMainScreen,
         CommOffAction : CommOffAction,
+        CommOnAction : CommOnAction,
         CommTalk : CommTalk,
         CommShare : CommShare
     },
@@ -60,7 +61,7 @@ HomeStack.navigationOptions = ({ navigation }) => {
   let swipeEnabled;
   if (navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
-      if (route.routeName === "PointScreen" || route.routeName === "CommMainScreen" || route.routeName === "CommOffAction" || route.routeName === "CommTalk" || route.routeName === "CommShare") {
+      if (route.routeName === "PointScreen" || route.routeName === "CommMainScreen" || route.routeName === "CommOffAction" || route.routeName === "CommTalk" || route.routeName === "CommShare" || route.routeName === "CommOnAction") {
         tabBarVisible = false;
         swipeEnabled =  false;
       } else {

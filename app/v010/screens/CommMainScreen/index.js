@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import ScrollableTabView, { DefaultTabBar, ScrollableTabBar } from 'react-native-scrollable-tab-view-forked'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { Button, Snackbar } from 'react-native-paper';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 
@@ -19,6 +20,12 @@ import MyRankScreen from '../MyRankScreen';
 import PointHistoryScreen from '../PointHistoryScreen';
 import PointStandardScreen from '../PointStandardScreen';
 import CommActivityList from '../../customComponents/CommActivityList';
+import dayjs from 'dayjs'
+import 'dayjs/locale/ko'
+dayjs.locale('ko')
+
+
+
 export default class CommMainScreen extends Component{
   constructor(props){
         super(props);
@@ -28,6 +35,7 @@ export default class CommMainScreen extends Component{
             goingLen : 0,
             takeLen : 0,
             archiveLen : 0,
+            visible : false,
         }
     }
     static defaultProps = {
@@ -69,8 +77,6 @@ export default class CommMainScreen extends Component{
               takeLen : Object.keys(this.state.participateResult).length,
               archiveLen : Object.keys(this.state.archiveResult).length
             })
-            // console.log("가입되었는가? 0이면 가입 안되어 있고 1이면 가입되어 있음");
-            // console.log(this.state.joinStatus);
           });
     }
     setStateForTabChange(e){
@@ -134,12 +140,18 @@ export default class CommMainScreen extends Component{
         .then((responseJson) => {
             if(responseJson.result =='success'){
                 this.setState({
-                  joinStatus : !this.state.joinStatus
+                  joinStatus : !this.state.joinStatus,
+                  visible: !this.state.visible,
                 })
             }
         })
     }
 
+    fotmattingDate(param){
+        console.log(param);
+        const date = dayjs(param)
+        return date.format('YYYY년 MM월 DD일 dddd')
+    }
     render(){
       if(this.state.isLoading){
           return(
@@ -157,19 +169,16 @@ export default class CommMainScreen extends Component{
                   <View style = {{paddingBottom : wp('3.5')}}>
                     <Text style = {{fontSize:wp('5.5'), fontWeight : 'bold'}}>{this.state.commInfo[0].name}</Text>
                   </View>
-                  <View style = {{paddingBottom : wp('1')}}>
-                    <Text>채용비리 근절을 위해 만들어진 비대위입니다.</Text>
-                  </View>
-                  <View style = {{flexDirection : 'row'}}>
+                  <View>
                     <View>
                       <Text style = {{fontSize : wp('3'), paddingRight : wp('2')}}>참여인원 : {this.state.commInfo[0].count}</Text>
                     </View>
                     <View>
-                      <Text style = {{fontSize : wp('3')}}>시작날짜 : {this.state.commInfo[0].date}</Text>
+                      <Text style = {{fontSize : wp('3')}}>시작날짜 : {this.fotmattingDate(this.state.commInfo[0].date)}</Text>
                     </View>
                   </View>
                   <TouchableHighlight style = {this.state.joinStatus ==0 ? styles.notParticipateSection : styles.participateSection} onPress={() => this.commAlert(this.props.navigation.getParam('commId'),this.props.navigation.getParam('commName'))} underlayColor='white'>
-                    <Text style = {{fontSize : wp('4'),fontWeight : 'bold'}}>{this.state.joinStatus==0 ? "참여하기" : "가입중"}</Text>
+                    <Text style = {{fontSize : wp('5'),fontWeight : 'bold'}}>{this.state.joinStatus==0 ? "참여하기" : "가입중"}</Text>
                   </TouchableHighlight>
               </View>
             </View>
@@ -192,6 +201,18 @@ export default class CommMainScreen extends Component{
                       <CommActivityList dataset = {this.state.archiveResult} key={'3'} tabLabel={`아카이브 (${this.state.archiveLen})`} style={{flex:1,backgroundColor:'red'}} navigation={this.props.navigation} type = 'archive' isActive={this.state.isSceneThreeVisible}/>
                 </ScrollableTabView>
             </View>
+            <Snackbar
+              visible={this.state.visible}
+              onDismiss={() => this.setState({ visible: false })}
+              action={{
+                label: 'Ok!',
+                onPress: () => {
+                  // Do something
+                },
+              }}
+            >
+              비대위에 가입되었습니다.
+        </Snackbar>
           </View>
         )
     }
@@ -233,9 +254,9 @@ const styles = StyleSheet.create({
     paddingLeft : wp('3'),
   },
   notParticipateSection : {
-    width : wp('23'),
-    height : wp('8'),
-    borderRadius : wp('5'),
+    width : wp('35'),
+    height : wp('10'),
+    borderRadius : wp('8'),
     backgroundColor : 'white',
     marginTop : wp('5'),
     borderWidth : wp(0.3),
@@ -245,9 +266,9 @@ const styles = StyleSheet.create({
     justifyContent : 'center',
   },
   participateSection : {
-    width : wp('23'),
-    height : wp('8'),
-    borderRadius : wp('5'),
+    width : wp('35'),
+    height : wp('10'),
+    borderRadius : wp('8'),
     backgroundColor : 'white',
     marginTop : wp('5'),
     backgroundColor : '#1abc9c',

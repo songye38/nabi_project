@@ -25,6 +25,8 @@ export default class CommShare extends Component{
             isLoading: true,
             keyword : 'all',
             modalVisible : false,
+            userId : '5db7d2513c6cbc15d538be46',
+            userName : '송이송이'
         }
     }
     static navigationOptions = ({ navigation }) => {
@@ -48,9 +50,46 @@ export default class CommShare extends Component{
             this.setState({
                 dataset: res1.value,
                 isLoading : false,
+                commentStatus : res1.value[0].commentStatus,
             });
             console.log(this.state.dataset);
           });  
+    }
+
+    addComment(){
+        fetch('https://songye.run.goorm.io/share/write', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              share_id : this.props.navigation.getParam('actionId'),
+              user_id : this.state.userId,
+              user_name : this.state.userName,
+              comm_id : this.props.navigation.getParam('commId'),
+              comm_name :this.props.navigation.getParam('commName'),
+              comm_pic : "Null",
+              content : this.state.comment,
+              img1:1238239283234,
+              img2:2892839839823,
+              img3:2983492849283,
+          }),
+        })
+        .then(response => {
+        if (response.status === 200) {
+          responseJson = response.json();
+          return responseJson;
+        } else {
+          throw new Error('Something went wrong on api server!');
+        }
+      })
+        .then((responseJson) => {
+            if(responseJson.result =='success'){
+                this.componentDidMount();
+                this.setState({comment : ''})
+            }
+        })
     }
 
     showModal = () => {
@@ -72,6 +111,37 @@ export default class CommShare extends Component{
 
 
     render(){
+        let comment;
+        if(this.state.commentStatus === 1 ){
+            comment =  <ScrollView style = {styles.commentSection} showsVerticalScrollIndicator={false}>
+                {this.state.dataset.map((element, index) => {
+                 return (
+                    <View style = {styles.commentList} key = {index}>
+                        <View style = {styles.profileSection}>
+                            <View style = {styles.img}/>
+                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
+                        </View>
+                        <View style = {styles.contentSection}>
+                            <View style = {styles.subContent}>
+                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
+                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
+                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
+                                        추천 13
+                                    </Text>
+                                </View>
+                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
+                            </View>
+                            <View style = {styles.mainContent}>
+                                <Text style = {{lineHeight : wp('5.5')}}>{element.userList.content}</Text>
+                            </View>
+                        </View>
+                    </View>                            
+                );
+              })}      
+            </ScrollView>
+        }else{
+            comment = <View><Text>아직 등록된 댓글이 없습니다.</Text></View>
+        }
         if(this.state.isLoading){
           return(
             <View style={{flex: 1, padding: 20}}>
@@ -95,8 +165,12 @@ export default class CommShare extends Component{
                         style = {{fontSize : wp('3.5'),paddingLeft : wp('3'),textAlign : 'auto'}}
                         placeholder={"댓글을 입력해주세요."}
                         onChangeText={(text) => {
-                            this.setState({keyword: text})
-                          }} />
+                            this.setState({text: text})
+                        }}
+                        onSubmitEditing={()=>{
+                            this.setState({comment : this.state.text})
+                            this.addComment()
+                    }} />
                 </View>
                 <View style = {styles.sortingSection}>
                     <View style = {{paddingRight : wp('7'),flexDirection : 'row',alignItems : 'center'}}>
@@ -108,380 +182,7 @@ export default class CommShare extends Component{
                         <Icon name='down' type='antdesign' size = {15}/>
                     </View>
                 </View>
-                <ScrollView 
-                    style = {styles.commentSection}
-                    showsVerticalScrollIndicator={false}>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => this.showModal()} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => this.showModal()} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => this.showModal()} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                    <View style = {styles.commentList}>
-                        <View style = {styles.profileSection}>
-                            <View style = {styles.img}/>
-                            <View style = {styles.name}><Text style = {{fontSize : wp('3'),fontWeight : 'bold'}}>송이송이</Text></View>
-                        </View>
-                        <View style = {styles.contentSection}>
-                            <View style = {styles.subContent}>
-                                <View style = {{paddingRight : wp('3'),flexDirection : 'row',alignItems : 'center'}}>
-                                    <Icon name='heart' type='antdesign' size = {15} color = 'red'/>
-                                    <Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red',paddingLeft : wp('1')}}>
-                                        추천 13
-                                    </Text>
-                                </View>
-                                <View><Text style = {{fontSize : wp('3'),fontWeight : 'bold',color : 'red'}}>new!</Text></View>
-                            </View>
-                            <View style = {styles.mainContent}>
-                                <Text style = {{lineHeight : wp('5.5')}}>대통령은 내란 또는 외환의 죄를 범한 경우를 제외하고는 재직중 형사상의 소추를 받지 아니한다. 모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.</Text>
-                            </View>
-                            <View style = {styles.imgSection}>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                                <ImageBackground style={{flex : 1,height: 50,marginRight : wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}} blurRadius  = {8}>
-                                    <TouchableHighlight onPress={() => alert("hello")} underlayColor='#eee'>
-                                        <Icon name='plus' type='antdesign' size = {25} color = 'orange'/>
-                                    </TouchableHighlight>
-                                </ImageBackground>
-                            </View>
-                        </View>
-                    </View>
-                </ScrollView>
+                    {comment}
                 <Modal
                   isVisible={this.state.modalVisible == true}
                   onSwipeComplete={() => this.setState({modalVisible: false})}

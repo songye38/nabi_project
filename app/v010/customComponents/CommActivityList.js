@@ -32,7 +32,7 @@ export default class CommActivityList extends Component{
             isLoading : false,
         }) 
       }
-    setNavigateName(type,title,actionId,commId){
+    setNavigateName(type,title,actionId,commId,commName){
         const { navigate } = this.props.navigation;
         switch(type){
             case "press":
@@ -40,39 +40,62 @@ export default class CommActivityList extends Component{
                   actionId: actionId,
                   title : title,
                   commId : commId,
+                  commName : commName
                 })
             case 'protest':
                 return navigate('CommOffAction',{
                   actionId: actionId,
                   title : title,
                   commId : commId,
+                  commName : commName
                 })
             case 'lawmake':
                 return navigate('CommOnAction',{
                   actionId: actionId,
                   title : title,
                   commId : commId,
+                  commName : commName
                 })
             case 'petition':
                 return navigate('CommOnAction',{
                   actionId: actionId,
                   title : title,
                   commId : commId,
+                  commName : commName
                 })
             case 'talk':
                 return navigate('CommTalk',{
                   actionId: actionId,
                   title : title,
                   commId : commId,
+                  commName : commName
                 })
             case 'share':
                 return navigate('CommShare',{
                   actionId: actionId,
                   title : title,
                   commId : commId,
+                  commName : commName
                 })
 
 
+        }
+
+    }
+    renderIcon(type){
+      switch(type){
+            case "press":
+                return <Icon name='map' type='feather' size = {22}/>
+            case 'protest':
+                return <Icon name='map' type='feather' size = {22}/>
+            case 'lawmake':
+                return <Icon name='link' type='feather' size = {22}/>
+            case 'petition':
+                return <Icon name='link' type='feather' size = {22}/>
+            case 'talk':
+                return <Icon name='message-circle' type='feather' size = {22}/>
+            case 'share':
+                return <Icon name='file-text' type='feather' size = {22}/>
         }
 
     }
@@ -92,17 +115,14 @@ export default class CommActivityList extends Component{
                     <View style={styles.listMainContent} key={index}>
                         <View style = {styles.contentSection}>
                             <View style = {styles.categorySection}>
-                                <Icon name='users' type='feather' size = {28}/>
+                                {this.renderIcon(element.type)}
                             </View>
                             <View style = {styles.textSection}>
                                 <View style = {styles.subTextSection}>
-                                    <Text style = {styles.subText}>{element.comm_name}</Text>
-                                    <Text style = {styles.subText}>{element.day}</Text>
-                                    <Text style = {styles.subText}>{element.time}</Text>
-                                    <Text style = {styles.subText}>{element.loc}</Text>
+                                    <Text style = {styles.subText}>신청기간 [{element.start} ~ {element.end}]</Text>
                                 </View>
-                                <TouchableHighlight style = {styles.mainTextSection} onPress={() => this.setNavigateName(element.type,element.title,element._id.$oid,element.comm_id.$oid)} underlayColor='white'>
-                                    <Text style = {{fontSize : wp('4')}} numberOfLines={1}>{element.title}</Text>
+                                <TouchableHighlight style = {styles.mainTextSection} onPress={() => this.setNavigateName(element.type,element.title,element._id.$oid,element.comm_id.$oid,element.comm_name)} underlayColor='white'>
+                                    <Text style = {{fontSize : wp('4.7')}} numberOfLines={1}>{element.title}</Text>
                                 </TouchableHighlight>
                             </View>
                         </View>  
@@ -129,24 +149,24 @@ const styles = StyleSheet.create({
     },
     contentSection : {
         width : wp('100%'),
-        height : wp('10'),
+        height : wp('12'),
         flexDirection : 'row',
     },
     categorySection : {
-        width : wp('20%'),
+        width : wp('18%'),
         justifyContent : 'center',
         alignItems : 'center',
     },
     textSection : {
         flex : 1,
+        paddingRight : wp(10),
     }, 
     subTextSection : {
         flexDirection : 'row',
         marginBottom : wp('2'),
     },
     subText : {
-        fontSize : wp('3'),
-        paddingRight : wp('1.5'), 
-        fontWeight : 'bold'
+        fontSize : wp('2.7'),
+        paddingRight : wp('1.5')
     }
 })

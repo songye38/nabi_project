@@ -10,9 +10,15 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import { Icon, Avatar } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { Switch } from 'react-native-paper';
 import LoginScreen from '../LoginScreen';
 
 export default class SettingScreen extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = { isSwitchOn: false}
+    }
     _navigate(){
         this.props.navigation.navigate('SomethingScreen');
     }
@@ -77,6 +83,12 @@ export default class SettingScreen extends Component{
                     <Text style={styles.pwdText}>
                         푸시 설정
                     </Text>
+                    <Switch
+                    value={this.state.isSwitchOn}
+                    onValueChange={() =>{ 
+                        this.setState({ isSwitchOn : !this.state.isSwitchOn }); }
+                    }
+                  />
                 </View>
                 <View style={styles.twoColumnSection}>
                     <Text style={styles.pwdText}>
