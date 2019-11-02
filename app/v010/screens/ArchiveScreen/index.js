@@ -57,7 +57,7 @@ export default class ArchiveScreen extends Component{
           .then(([res1, res2]) => {
             this.setState({
                 isLoading : false,
-                participateList : res1.value[0]['pointList'],
+                participateList : res1.value,
                 userPointData : res2.value
             });
           });
@@ -173,14 +173,14 @@ export default class ArchiveScreen extends Component{
                             {this.state.participateList.map((element, index) => {
                                      return (
                                         <View style = {styles.listContentSection} key={index}>
-                                            <TouchableHighlight style= {styles.listImg} onPress={() => this.navigateToCommMain(element.comm_id.$oid,element.comm_name)} underlayColor='white'><Text></Text></TouchableHighlight>
+                                            <TouchableHighlight style= {styles.listImg} onPress={() => this.navigateToCommMain(element.pointList.comm_id.$oid,element.pointList.comm_name)} underlayColor='white'><Text></Text></TouchableHighlight>
                                             <View style={styles.listMainContent}>
                                                <View style = {styles.title}>
-                                                    <Text style={styles.dateText}>{this.fotmattingDate(element.date.$date)}</Text>
+                                                    <Text style={styles.dateText}>{this.fotmattingDate(element.pointList.date.$date)}</Text>
                                                 </View>  
-                                                <TouchableHighlight style = {styles.explain} onPress={() => this.navigateToAction(element.type,element.comm_id.$oid,element.action_id)} underlayColor='white'>
+                                                <TouchableHighlight style = {styles.explain} onPress={() => this.navigateToAction(element.pointList.type,element.pointList.comm_id.$oid,element.pointList.action_id)} underlayColor='white'>
                                                     <Text style={styles.explainText}>
-                                                        {this.switchMessage(element.type)}
+                                                        {this.switchMessage(element.pointList.type)}
                                                     </Text>
                                                 </TouchableHighlight>
                                             </View>

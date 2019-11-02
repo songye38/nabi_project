@@ -256,7 +256,3 @@ const styles = StyleSheet.create({
   }
 })
 
-
- 
-
-
