@@ -7,7 +7,8 @@ import {
     TextInput,
     ActivityIndicator,
     ActionSheetIOS,
-    TouchableHighlight
+    TouchableHighlight,
+    Picker
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -17,6 +18,8 @@ import CommOffAction from '../../customComponents/CommOffAction';
 import CommOnAction from '../../customComponents/CommOnAction';
 import CommTalk from '../../customComponents/CommTalk';
 import CommShare from '../../customComponents/CommShare';
+import ScrollableModal from '../../customComponents/ScrollableModal';
+import DatePicker from '../../customComponents/datePicker';
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
@@ -30,6 +33,7 @@ export default class ArchiveScreen extends Component{
         this.state ={ 
             isLoading: true,
             userId : '5db7d2513c6cbc15d538be46',
+            scrollModalStatus : false,
         }
     }
 
@@ -123,6 +127,9 @@ export default class ArchiveScreen extends Component{
             return navigate('CommOffAction',{actionId : actionId,commId : commId})
       }
     }
+    showCommModal(){
+        return <ScrollableModal message = 'hi~'></ScrollableModal>
+    }
 
     render(){
         const { navigate } = this.props.navigation;
@@ -155,11 +162,11 @@ export default class ArchiveScreen extends Component{
                 <View style={styles.categorySection}>
                     <View style = {styles.cagegoryItem}>
                         <Text style={styles.categoryTitle}>모든 비대위</Text>
-                        <Icon name='keyboard-arrow-down' type='materialIcons'/>
+                        <ScrollableModal title = "비대위 목록" underlayColor='white'></ScrollableModal>
                     </View>
                     <View style = {styles.cagegoryItem}>
                         <Text style={styles.categoryTitle}>모든 활동</Text>
-                        <Icon name='keyboard-arrow-down' type='materialIcons'/>
+                        <ScrollableModal title = "활동 종류" underlayColor='white'></ScrollableModal>
                     </View>
                     <View style = {styles.cagegoryItem}>
                         <Text style={styles.categoryTitle}>모든 기간</Text>
@@ -175,7 +182,7 @@ export default class ArchiveScreen extends Component{
                                             <TouchableHighlight style= {styles.listImg} onPress={() => this.navigateToCommMain(element.pointList.comm_id.$oid,element.pointList.comm_name)} underlayColor='white'><Text></Text></TouchableHighlight>
                                             <View style={styles.listMainContent}>
                                                <View style = {styles.title}>
-                                                    <Text style={styles.dateText}>{this.fotmattingDate(element.pointList.date.$date)}</Text>
+                                                    <Text style={styles.dateText}>{element.pointList.comm_name}</Text>
                                                 </View>  
                                                 <TouchableHighlight style = {styles.explain} onPress={() => this.navigateToAction(element.pointList.type,element.pointList.comm_id.$oid,element.pointList.action_id)} underlayColor='white'>
                                                     <Text style={styles.explainText}>
