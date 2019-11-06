@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {
     View,
     Text,
-    TextInput,
     TouchableOpacity,
     StyleSheet,
     Alert
 } from 'react-native';
 
 import { StackActions, NavigationActions } from 'react-navigation';
+import { TextInput } from 'react-native-paper';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default class LoginScreen extends Component{
@@ -105,23 +105,22 @@ export default class LoginScreen extends Component{
                 </View>
                 <View style={styles.formArea}>
                     <TextInput
-                        name = "email"
                         onChangeText = {this.handleChange}
-                        style={styles.textForm}
-                        placeholder={"이메일 주소"}
-                        onChangeText={(text) => {
-                            this.setState({email: text})
-                          }}
-                        value={this.state.email}/>
-                    <TextInput
-                        name = "pwd"
+                        label='이메일 주소'
+                        value={this.state.text}
+                        onChangeText={(text) => {this.setState({email: text})}}
+                        value={this.state.email}
+                        mode = 'outlined'
+                        style = {{marginBottom : wp(2)}}
+                      />
+                      <TextInput
+                        label='비밀번호'
+                        value={this.state.text}
                         secureTextEntry={true}
-                        style={styles.textForm}
-                        placeholder={"비밀번호"}
-                        onChangeText={(text) => {
-                            this.setState({pwd: text})
-                          }}
-                        value={this.state.pwd}/>
+                        onChangeText={(text) => {this.setState({pwd: text})}}
+                        value={this.state.pwd}
+                        mode = 'outlined'
+                      />
                 </View>
                 <View style={styles.buttonArea}>
                     <TouchableOpacity
