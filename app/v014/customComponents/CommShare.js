@@ -51,7 +51,6 @@ export default class CommShare extends Component{
                 isLoading : false,
                 commentStatus : res1.value[0].commentStatus,
             });
-            console.log(this.state.dataset);
           });  
     }
 

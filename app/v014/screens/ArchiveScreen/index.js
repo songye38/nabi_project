@@ -60,7 +60,6 @@ export default class ArchiveScreen extends Component{
 
     componentDidMount() {
         const url1 = `https://songye.run.goorm.io/actSearch/${this.state.commId}/${this.state.type}/${this.state.date}/${this.state.userId}`;
-        console.log(url1);
         const url2 = `https://songye.run.goorm.io/point/rank/${this.state.userId}`;
         const commName = `https://songye.run.goorm.io/commNameSearch/${this.state.userId}`;
         Promise.all([fetch(url1), fetch(url2),fetch(commName)])

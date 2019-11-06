@@ -77,8 +77,7 @@ export default class SearchScreen extends Component{
     addStatusToList(){
         this.state.commListData.map((element, index) => {
             const url1 = `https://songye.run.goorm.io/searchJoinStatus/${element._id.$oid}/${this.state.userId}`;
-            Promise.all([fetch(url1)])
-
+              Promise.all([fetch(url1)])
               .then(([res1]) => { 
                  return Promise.all([res1.json()]) 
               })
