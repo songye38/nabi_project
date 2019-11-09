@@ -31,6 +31,7 @@ export default class CommTalk extends Component{
         };
       };
 
+
     componentDidMount(){
         let commId = this.props.navigation.getParam('commId');
         let actionId = this.props.navigation.getParam('actionId');
@@ -52,6 +53,8 @@ export default class CommTalk extends Component{
             });
           });  
     }
+
+
 
     addComment(){
         fetch('https://songye.run.goorm.io/talk/write', {

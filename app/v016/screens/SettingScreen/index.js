@@ -45,9 +45,6 @@ export default class SettingScreen extends Component{
             });
           });  
     }
-    _navigate(){
-        this.props.navigation.navigate('SomethingScreen');
-    }
     _updatePushState(state){
         fetch('https://songye.run.goorm.io/setting/push', {
           method: 'PUT',

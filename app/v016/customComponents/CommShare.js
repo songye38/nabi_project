@@ -7,16 +7,26 @@ import {
     ActivityIndicator,
     TouchableOpacity,
     Alert,
-    Keyboard
+    Keyboard,
+    Image,
+    ImageBackground
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Swipeable from 'react-native-swipeable';
-import {TextInput,Button,Dialog,Portal } from 'react-native-paper';
+import {TextInput,Button,Dialog,Portal,Paragraph } from 'react-native-paper';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import ImagePicker from 'react-native-image-picker';
+import OptionModal from './OptionModal';
+import ShareImgModal from './ShareImgModal';
 
 export default class CommShare extends Component{
+
+    state = {
+        img1 : null,
+        img2 : null,
+        img3 : null,
+    };
 
     constructor(props){
         super(props);
@@ -27,6 +37,11 @@ export default class CommShare extends Component{
             userId : '5db7d2513c6cbc15d538be46',
             userName : '송이송이',
             textInputStatus : false,
+            text : '',
+            authorOption : 'all',
+            dateOption : 'latest',
+            showModalStatus : false,
+
         }
     }
     static navigationOptions = ({ navigation }) => {
@@ -38,6 +53,7 @@ export default class CommShare extends Component{
         },
         };
       };
+
     componentDidMount(){
         let commId = this.props.navigation.getParam('commId');
         let actionId = this.props.navigation.getParam('actionId');
@@ -55,13 +71,53 @@ export default class CommShare extends Component{
           });  
     }
 
+    selectPhotoTapped(index){
+      const options = {
+        quality: 1.0,
+        maxWidth: 300,
+        maxHeight: 300,
+        index : index,
+        storageOptions: {
+          skipBackup: true,
+        },
+      };
+
+      ImagePicker.showImagePicker(options,(response) => {
+        //console.log('Response = ', response);
+
+        if (response.didCancel) {
+          //console.log('User cancelled photo picker');
+        } else if (response.error) {
+          //console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          //console.log('User tapped custom button: ', response.customButton);
+        } else {
+          //let source = {uri: response.uri};
+
+          // You can also display the image using data:
+          let source = { uri: 'data:image/jpeg;base64,'+response.data};
+
+          if(options.index==0){
+            this.setState({img1 : source});
+          }else if(options.index==1){
+            this.setState({img2 : source});
+          }else{
+            this.setState({img3 : source});
+          }
+        }
+      });
+  }
+
     addComment(){
+      console.log("this.state.text")
+      console.log(this.state.text)
         fetch('https://songye.run.goorm.io/share/write', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
+          //body: formdata
           body: JSON.stringify({
               share_id : this.props.navigation.getParam('actionId'),
               user_id : this.state.userId,
@@ -69,10 +125,10 @@ export default class CommShare extends Component{
               comm_id : this.props.navigation.getParam('commId'),
               comm_name :this.props.navigation.getParam('commName'),
               comm_pic : "Null",
-              content : this.state.comment,
-              img1:1238239283234,
-              img2:2892839839823,
-              img3:2983492849283,
+              content : this.state.text,
+              img1:this.state.img1,
+              img2:this.state.img2,
+              img3:this.state.img3,
           }),
         })
         .then(response => {
@@ -86,25 +142,53 @@ export default class CommShare extends Component{
         .then((responseJson) => {
             if(responseJson.result =='success'){
                 this.componentDidMount();
-                this.setState({comment : ''})
+                this.setState({comment : '',img1 : null,img2:null,img3:null})
+                alert("댓글이 정상적으로 등록되었습니다.");
+            }else if(responseJson.result =='fail'){
+              alert("댓글이 입력되지 않았습니다.");
             }
         })
     }
 
-    showModal = () => {
-    this.setState({
-      modalVisible: true
-    });
-    setTimeout(() => {
-      this.setState({
-        modalVisible: false
-      })
-      }, 700);
-  }
+  //   showModal = () => {
+  //   this.setState({
+  //     modalVisible: true
+  //   });
+  //   setTimeout(() => {
+  //     this.setState({
+  //       modalVisible: false
+  //     })
+  //     }, 700);
+  // }
 
   _hideDialog = () => {
         this.setState({ textInputStatus: false,text : ''});
         Keyboard.dismiss()
+  }
+  _sendDialog = () => {
+      if(this.state.text==''){
+        alert("댓글을 입력해주세요.")
+      }
+      if(this.state.text!=''){
+        this.addComment();
+        this.setState({ textInputStatus: false,text : ''});
+        Keyboard.dismiss()
+      }
+  }
+
+  _hideModal=()=>{
+     this.setState({ showModalStatus: false});
+  }
+  _showModal=(index,img1,img2,img3)=>{
+     this.setState({ showModalStatus: true,userSelectImg1 : });
+  }
+  _updateSortOption=(type,option)=>{
+    if(type=='author'){
+        this.setState({authorOption : option})
+    }else {
+      this.setState({dateOption : option})
+    }
+
   }
 
     renderModalContent = () => (
@@ -178,7 +262,6 @@ export default class CommShare extends Component{
                         multiline = {true}
                         label='댓글을 입력해주세요.'
                         value={this.state.text}
-                        // onChangeText={(text) => {this.setState({text: text})}}
                         onFocus = {()=>{this.setState({textInputStatus : true})}}
                       />
                       {this.state.textInputStatus == true ? buttons : null}
@@ -188,6 +271,9 @@ export default class CommShare extends Component{
              visible={this.state.textInputStatus}
              onDismiss={this._hideDialog}>
             <Dialog.Title>자료공유</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>최소 1개의 이미지를 업로드 해주세요.</Paragraph>
+            </Dialog.Content>
             <Dialog.ScrollArea>
                 <View>
                     <TextInput
@@ -202,10 +288,16 @@ export default class CommShare extends Component{
                 </View>
           </Dialog.ScrollArea>
           <View style = {{flexDirection : 'row',alignItems : 'center',justifyContent : 'space-between',height : wp('15')}}>
-              <View style = {{flexDirection : 'row'}}>
-                <TouchableOpacity style = {{paddingLeft : wp('7')}}><Icon name='file-plus' type='feather' size = {25} color = 'black'/></TouchableOpacity>
-                <TouchableOpacity style = {{paddingLeft : wp('7')}}><Icon name='file-plus' type='feather' size = {25} color = 'black'/></TouchableOpacity>
-                <TouchableOpacity style = {{paddingLeft : wp('7')}}><Icon name='file-plus' type='feather' size = {25} color = 'black'/></TouchableOpacity>
+              <View style = {{flexDirection : 'row',marginLeft:wp('7')}}>
+                <TouchableOpacity onPress={() => this.selectPhotoTapped(0)} style = {{paddingRight : wp('3'),justifyContent : 'center'}}>
+                  {this.state.img1 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img1} />}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.selectPhotoTapped(1)} style = {{paddingRight : wp('3'),justifyContent:'center'}}>
+                  {this.state.img2 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img2} />}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.selectPhotoTapped(2)} style = {{paddingRight : wp('3'),justifyContent : 'center'}}>
+                  {this.state.img3 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img3} />}
+                </TouchableOpacity>
               </View>
               <Dialog.Actions>
                   <Button onPress={this._hideDialog}>취소</Button>
@@ -237,6 +329,23 @@ export default class CommShare extends Component{
                                 <View style = {styles.mainContent}>
                                     <Text style = {{lineHeight : wp('5.5')}}>{element.userList.content}</Text>
                                 </View>
+                                <View style = {{flexDirection : 'row'}}>
+                                      <TouchableOpacity onPress={() => this._showModal(0,element.userList.img1)}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={element.userList.img1} blurRadius={15}>
+                                            <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
+                                          </ImageBackground>
+                                      </TouchableOpacity>
+                                      <TouchableOpacity onPress={() => this._showModal(1,element.userList.img2)}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={element.userList.img2} blurRadius={15}>
+                                            <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
+                                          </ImageBackground>
+                                      </TouchableOpacity>
+                                      <TouchableOpacity onPress={() => this._showModal(2,element.userList.img3)}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={element.userList.img3} blurRadius={15}>
+                                            <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
+                                          </ImageBackground>
+                                      </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </Swipeable>                            
@@ -265,8 +374,7 @@ export default class CommShare extends Component{
                 </View>
                 <View style = {styles.sortingSection}>
                     <View style = {{paddingRight : wp('7'),flexDirection : 'row',alignItems : 'center'}}>
-                        <Text style = {{paddingRight : wp('1')}}>모든 글쓴이</Text>
-                        <Icon name='down' type='antdesign' size = {15}/>
+                      <OptionModal parentCallback = {this._updateSortOption}></OptionModal>
                     </View>
                     <View style = {{paddingRight : wp('7'),flexDirection : 'row',alignItems : 'center'}}>
                         <Text style = {{paddingRight : wp('1')}}>최신순</Text>
@@ -274,6 +382,7 @@ export default class CommShare extends Component{
                     </View>
                 </View>
                     {comment}
+                    {this.state.showModalStatus==true ? <ShareImgModal parentCallback = {this._hideModal}></ShareImgModal> : null}
                     {this.state.textInputStatus == true ? textInputTop : textInput}
                 <Modal
                   isVisible={this.state.modalVisible == true}
@@ -303,7 +412,7 @@ const styles = StyleSheet.create({
         width : wp('90%'),
         flex : 1,
         position : 'absolute',
-        bottom : 0,
+        bottom : wp('5'),
         marginBottom : wp('3'),
         justifyContent : 'center',
     },
@@ -326,6 +435,7 @@ const styles = StyleSheet.create({
     commentSection : {
         width : wp('95%'),
         flex : 1,
+        marginBottom : wp('25'),
     },
     commentList : {
         width : wp('95%'),
@@ -355,6 +465,7 @@ const styles = StyleSheet.create({
     mainContent : {
         flex : 1,
         paddingRight : wp('5'),
+        marginBottom : wp('8'),
     },
     subContent : {
         flexDirection : 'row',
@@ -397,6 +508,11 @@ const styles = StyleSheet.create({
         alignItems : 'center',
         borderLeftWidth : wp('0.2'),
         borderLeftColor : '#eee',
+  },
+  avatar: {
+    borderRadius: wp('10'),
+    width: wp('10'),
+    height: wp('10'),
   },
 })
 
