@@ -18,13 +18,13 @@ export default class ShareImgModal extends Component {
         </TouchableOpacity>
         <Swiper style={styles.wrapper} showsButtons={true}>
           <View style={styles.slide1}>
-            <Image style={styles.avatar} source={this.props.img1} />
+            <Image style={styles.avatar} source={{uri:this.props.img1}} />
           </View>
           <View style={styles.slide2}>
-            <Image style={styles.avatar} source={this.props.img2} />
+            <Image style={styles.avatar} source={{uri:this.props.img2}} />
           </View>
           <View style={styles.slide3}>
-            <Image style={styles.avatar} source={this.props.img3} />
+            <Image style={styles.avatar} source={{uri:this.props.img3}} />
           </View>
         </Swiper>
       </View>
@@ -46,19 +46,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'yellow'
   },
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#97CAE5'
   },
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9'
   },
   text: {
     color: '#fff',
@@ -66,7 +63,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   avatar : {
-    width : '50%',
-    height : '50%',
+    width : '100%',
+    height : '100%',
   }
 })

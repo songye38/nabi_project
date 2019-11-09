@@ -15,6 +15,10 @@ export default class CommShare extends Component{
         img1 : null,
         img2 : null,
         img3 : null,
+        userSelectedImg1 : null,
+        userSelectedImg2 : null,
+        userSelectedImg3 : null,
+        userSelectedIndex : 0,
     };
 
     constructor(props){
@@ -55,8 +59,13 @@ export default class CommShare extends Component{
             this.setState({
                 dataset: res1.value,
                 commentStatus : res1.value[0].commentStatus,
+            },function () {
+                if(this.state.commentStatus==0){
+                    this.setState({isLoading : false})
+                }else{
+                    this._addImagesToState();
+                }
             });
-            this._addImagesToState();
           });  
     }
 
@@ -82,8 +91,8 @@ export default class CommShare extends Component{
     selectPhotoTapped(index){
       const options = {
         quality: 1.0,
-        maxWidth: 300,
-        maxHeight: 300,
+        maxWidth: 700,
+        maxHeight: 700,
         index : index,
         storageOptions: {
           skipBackup: true,
@@ -177,7 +186,7 @@ export default class CommShare extends Component{
      this.setState({ showModalStatus: false});
   }
   _showModal=(index,img1,img2,img3)=>{
-     this.setState({ showModalStatus: true});
+     this.setState({ showModalStatus: true,userSelectedImg1 : img1, userSelectedImg2 : img2, userSelectedImg3 : img3,userSelectedIndex : index});
   }
   _updateSortOption=(type,option)=>{
     if(type=='author'){
@@ -287,13 +296,13 @@ export default class CommShare extends Component{
           <View style = {{flexDirection : 'row',alignItems : 'center',justifyContent : 'space-between',height : wp('15')}}>
               <View style = {{flexDirection : 'row',marginLeft:wp('7')}}>
                 <TouchableOpacity onPress={() => this.selectPhotoTapped(0)} style = {{paddingRight : wp('3'),justifyContent : 'center'}}>
-                  {this.state.img1 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={{uri : this.state.img1}} />}
+                  {this.state.img1 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img1} />}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.selectPhotoTapped(1)} style = {{paddingRight : wp('3'),justifyContent:'center'}}>
-                  {this.state.img2 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={{uri : this.state.img2}} />}
+                  {this.state.img2 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img2} />}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.selectPhotoTapped(2)} style = {{paddingRight : wp('3'),justifyContent : 'center'}}>
-                  {this.state.img3 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={{uri : this.state.img3}} />}
+                  {this.state.img3 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img3} />}
                 </TouchableOpacity>
               </View>
               <Dialog.Actions>
@@ -327,17 +336,17 @@ export default class CommShare extends Component{
                                     <Text style = {{lineHeight : wp('5.5')}}>{element.userList.content}</Text>
                                 </View>
                                 <View style = {{flexDirection : 'row'}}>
-                                      <TouchableOpacity onPress={() => this._showModal(0,element.userList.img1)}>
+                                      <TouchableOpacity onPress={() => this._showModal(0,element.userList.img1,element.userList.img2,element.userList.img3)}>
                                           <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img1}} blurRadius={15}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
-                                      <TouchableOpacity onPress={() => this._showModal(1,element.userList.img2)}>
+                                      <TouchableOpacity onPress={() => this._showModal(1,element.userList.img1,element.userList.img2,element.userList.img3)}>
                                           <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img2}} blurRadius={15}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
-                                      <TouchableOpacity onPress={() => this._showModal(2,element.userList.img3)}>
+                                      <TouchableOpacity onPress={() => this._showModal(2,element.userList.img1,element.userList.img2,element.userList.img3)}>
                                           <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img3}} blurRadius={15}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
@@ -379,7 +388,7 @@ export default class CommShare extends Component{
                     </View>
                 </View>
                     {comment}
-                    {this.state.showModalStatus==true ? <ShareImgModal parentCallback = {this._hideModal}></ShareImgModal> : null}
+                    {this.state.showModalStatus==true ? <ShareImgModal parentCallback = {this._hideModal} img1 = {this.state.userSelectedImg1} img2 = {this.state.userSelectedImg2} img3 = {this.state.userSelectedImg3} index = {this.state.userSelectedIndex}></ShareImgModal> : null}
                     {this.state.textInputStatus == true ? textInputTop : textInput}
                 <Modal
                   isVisible={this.state.modalVisible == true}
