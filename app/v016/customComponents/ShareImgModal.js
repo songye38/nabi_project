@@ -16,7 +16,7 @@ export default class ShareImgModal extends Component {
         <TouchableOpacity style ={{alignItems : 'flex-end',paddingRight : '1%',paddingBottom : '1%'}} onPress={() => this._hideModal()}>
           <Icon name='closecircleo' type='antdesign' size = {20} color = 'black'/>
         </TouchableOpacity>
-        <Swiper style={styles.wrapper} showsButtons={true}>
+        <Swiper style={styles.wrapper} showsButtons={true} index = {this.props.index}>
           <View style={styles.slide1}>
             <Image style={styles.avatar} source={{uri:this.props.img1}} />
           </View>
