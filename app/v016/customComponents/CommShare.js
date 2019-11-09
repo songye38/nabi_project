@@ -1,16 +1,5 @@
 import React, {Component} from 'react';
-import {
-    View,
-    Text,
-    ScrollView,
-    StyleSheet,
-    ActivityIndicator,
-    TouchableOpacity,
-    Alert,
-    Keyboard,
-    Image,
-    ImageBackground
-} from 'react-native';
+import { View,Text,ScrollView,StyleSheet,ActivityIndicator,TouchableOpacity,Alert,Keyboard,Image,ImageBackground} from 'react-native';
 import { Icon } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Swipeable from 'react-native-swipeable';
@@ -65,10 +54,29 @@ export default class CommShare extends Component{
           .then(([res1]) => {
             this.setState({
                 dataset: res1.value,
-                isLoading : false,
                 commentStatus : res1.value[0].commentStatus,
             });
+            this._addImagesToState();
           });  
+    }
+
+    _addImagesToState = () => {
+        this.state.dataset.map((element, index) => {
+            const url1 = `https://songye.run.goorm.io/share/readImg/${element._id.$oid}/${element.userList.user_id.$oid}`;
+              Promise.all([fetch(url1)])
+              .then(([res1]) => { 
+                 return Promise.all([res1.json()]) 
+              })
+              .then(([res1]) => {
+                 this.state.dataset[index].userList.img1=res1.value.result.img1
+                 this.state.dataset[index].userList.img2=res1.value.result.img2
+                 this.state.dataset[index].userList.img3=res1.value.result.img3
+                this.setState({
+                    dataset : this.state.dataset,
+                    isLoading : false,
+                })
+              });
+        })
     }
 
     selectPhotoTapped(index){
@@ -150,17 +158,6 @@ export default class CommShare extends Component{
         })
     }
 
-  //   showModal = () => {
-  //   this.setState({
-  //     modalVisible: true
-  //   });
-  //   setTimeout(() => {
-  //     this.setState({
-  //       modalVisible: false
-  //     })
-  //     }, 700);
-  // }
-
   _hideDialog = () => {
         this.setState({ textInputStatus: false,text : ''});
         Keyboard.dismiss()
@@ -180,7 +177,7 @@ export default class CommShare extends Component{
      this.setState({ showModalStatus: false});
   }
   _showModal=(index,img1,img2,img3)=>{
-     this.setState({ showModalStatus: true,userSelectImg1 : });
+     this.setState({ showModalStatus: true});
   }
   _updateSortOption=(type,option)=>{
     if(type=='author'){
@@ -290,13 +287,13 @@ export default class CommShare extends Component{
           <View style = {{flexDirection : 'row',alignItems : 'center',justifyContent : 'space-between',height : wp('15')}}>
               <View style = {{flexDirection : 'row',marginLeft:wp('7')}}>
                 <TouchableOpacity onPress={() => this.selectPhotoTapped(0)} style = {{paddingRight : wp('3'),justifyContent : 'center'}}>
-                  {this.state.img1 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img1} />}
+                  {this.state.img1 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={{uri : this.state.img1}} />}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.selectPhotoTapped(1)} style = {{paddingRight : wp('3'),justifyContent:'center'}}>
-                  {this.state.img2 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img2} />}
+                  {this.state.img2 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={{uri : this.state.img2}} />}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.selectPhotoTapped(2)} style = {{paddingRight : wp('3'),justifyContent : 'center'}}>
-                  {this.state.img3 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={this.state.img3} />}
+                  {this.state.img3 == null ? <Icon name='file-upload' type='materialicons' size = {25} color = 'black'/> : <Image style={styles.avatar} source={{uri : this.state.img3}} />}
                 </TouchableOpacity>
               </View>
               <Dialog.Actions>
@@ -331,17 +328,17 @@ export default class CommShare extends Component{
                                 </View>
                                 <View style = {{flexDirection : 'row'}}>
                                       <TouchableOpacity onPress={() => this._showModal(0,element.userList.img1)}>
-                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={element.userList.img1} blurRadius={15}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img1}} blurRadius={15}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
                                       <TouchableOpacity onPress={() => this._showModal(1,element.userList.img2)}>
-                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={element.userList.img2} blurRadius={15}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img2}} blurRadius={15}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
                                       <TouchableOpacity onPress={() => this._showModal(2,element.userList.img3)}>
-                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={element.userList.img3} blurRadius={15}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img3}} blurRadius={15}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
