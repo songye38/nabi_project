@@ -15,6 +15,9 @@ import CommOffAction from './CommOffAction';
 import CommOnAction from './CommOnAction';
 import CommTalk from './CommTalk';
 import CommShare from './CommShare';
+import dayjs from 'dayjs'
+import 'dayjs/locale/ko'
+dayjs.locale('ko')
 
 
 export default class CommActivityList extends Component{
@@ -23,16 +26,26 @@ export default class CommActivityList extends Component{
         super(props);
         this.state ={ 
             isLoading: true,
+            date : 'hi',
         }
       }
-    componentWillReceiveProps(props) {
+    componentDidMount() {
           this.setState({
-            dataset: props.dataset,
-            type : props.type,
-            status : props.status,
-            isLoading : false,
-        }) 
+            dataset: this.props.dataset,
+            type : this.props.type,
+            status : this.props.status,
+        },function(){
+            this._getTodayDate()
+            this.setState({isLoading : false})
+        });
       }
+    _getTodayDate = ()=> {
+      let date = new Date().getDate(); //Current Date
+      let month = new Date().getMonth() + 1; //Current Month
+      let year = new Date().getFullYear(); //Current Year
+      this.setState({date : year+'-'+month+'-'+date},function(){
+      })
+    }
     setNavigateName(type,title,actionId,commId,commName){
         const { navigate } = this.props.navigation;
         switch(type){
@@ -86,17 +99,17 @@ export default class CommActivityList extends Component{
     renderIcon(type){
       switch(type){
             case "press":
-                return <Icon name='map' type='feather' size = {22}/>
+                return <Icon name='map' type='feather' size = {20}/>
             case 'protest':
-                return <Icon name='map' type='feather' size = {22}/>
+                return <Icon name='map' type='feather' size = {20}/>
             case 'lawmake':
-                return <Icon name='link' type='feather' size = {22}/>
+                return <Icon name='link' type='feather' size = {20}/>
             case 'petition':
-                return <Icon name='link' type='feather' size = {22}/>
+                return <Icon name='link' type='feather' size = {20}/>
             case 'talk':
-                return <Icon name='message-circle' type='feather' size = {22}/>
+                return <Icon name='message-circle' type='feather' size = {20}/>
             case 'share':
-                return <Icon name='file-text' type='feather' size = {22}/>
+                return <Icon name='file-text' type='feather' size = {20}/>
         }
 
     }
@@ -112,6 +125,8 @@ export default class CommActivityList extends Component{
         return(
             <ScrollView>
             {this.state.dataset.map((element, index) => {
+              const targetDay = dayjs(element.end)
+              const today = dayjs(this.state.date)
                  return (
                     <View style={styles.listMainContent} key={index}>
                         <View style = {styles.contentSection}>
@@ -123,8 +138,11 @@ export default class CommActivityList extends Component{
                                     <Text style = {styles.subText}>신청기간 [{element.start} ~ {element.end}]</Text>
                                 </View>
                                 <TouchableHighlight style = {styles.mainTextSection} onPress={() => { this.state.status==1 ?this.setNavigateName(element.type,element.title,element._id.$oid,element.comm_id.$oid,element.comm_name) : alert("가입하지 않은 회원은 읽을 수 없습니다.")}} underlayColor='white'>
-                                    <Text style = {{fontSize : wp('4.7')}} numberOfLines={1}>{element.title}</Text>
+                                    <Text style = {{fontSize : wp('4.4')}} numberOfLines={1}>{element.title}</Text>
                                 </TouchableHighlight>
+                            </View>
+                            <View style = {{width : wp('15%'),alignItems : 'center',justifyContent : 'center'}}>
+                              <Text style = {{fontSize : wp('3.5'),fontWeight : 'bold',color:'red'}}>D-{targetDay.diff(today,'day')}</Text>
                             </View>
                         </View>  
                     </View>                             
@@ -154,7 +172,7 @@ const styles = StyleSheet.create({
         flexDirection : 'row',
     },
     categorySection : {
-        width : wp('18%'),
+        width : wp('15%'),
         justifyContent : 'center',
         alignItems : 'center',
     },

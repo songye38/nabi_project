@@ -10,7 +10,6 @@ import OptionModal from './OptionModal';
 import ShareImgModal from './ShareImgModal';
 
 export default class CommShare extends Component{
-
     state = {
         img1 : null,
         img2 : null,
@@ -126,8 +125,6 @@ export default class CommShare extends Component{
   }
 
     addComment(){
-      console.log("this.state.text")
-      console.log(this.state.text)
         fetch('https://songye.run.goorm.io/share/write', {
           method: 'POST',
           headers: {
@@ -156,15 +153,15 @@ export default class CommShare extends Component{
           throw new Error('Something went wrong on api server!');
         }
       })
-        .then((responseJson) => {
-            if(responseJson.result =='success'){
-                this.componentDidMount();
-                this.setState({comment : '',img1 : null,img2:null,img3:null})
-                alert("댓글이 정상적으로 등록되었습니다.");
-            }else if(responseJson.result =='fail'){
-              alert("댓글이 입력되지 않았습니다.");
-            }
-        })
+      .then((responseJson) => {
+          if(responseJson.result =='success'){
+              this.componentDidMount();
+              this.setState({comment : '',img1 : null,img2:null,img3:null})
+              alert("댓글이 정상적으로 등록되었습니다.");
+          }else if(responseJson.result =='fail'){
+            alert("댓글이 입력되지 않았습니다.");
+          }
+      })
     }
 
   _hideDialog = () => {
@@ -244,6 +241,10 @@ export default class CommShare extends Component{
                     alert("정상적으로 삭제되었습니다.");
                 }
             })
+    }
+
+     _showComment = ()=>{
+        this.setState({textInputStatus : true})
     }
 
 
@@ -337,17 +338,17 @@ export default class CommShare extends Component{
                                 </View>
                                 <View style = {{flexDirection : 'row'}}>
                                       <TouchableOpacity onPress={() => this._showModal(0,element.userList.img1,element.userList.img2,element.userList.img3)}>
-                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img1}} blurRadius={15}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img1}} blurRadius={5}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
                                       <TouchableOpacity onPress={() => this._showModal(1,element.userList.img1,element.userList.img2,element.userList.img3)}>
-                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img2}} blurRadius={15}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img2}} blurRadius={5}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
                                       <TouchableOpacity onPress={() => this._showModal(2,element.userList.img1,element.userList.img2,element.userList.img3)}>
-                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img3}} blurRadius={15}>
+                                          <ImageBackground style={{width: wp('15'), height: wp('10'),marginRight: wp('3'),alignItems : 'center',justifyContent : 'center'}} source={{uri : element.userList.img3}} blurRadius={5}>
                                             <Icon name='plus' type='antdesign' size = {30} color = '#1abc9c'/>
                                           </ImageBackground>
                                       </TouchableOpacity>
