@@ -13,13 +13,20 @@ import { Icon } from 'react-native-elements';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import CommMainScreen from '../CommMainScreen';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateComm, updateCommSuccess,updateCommFailure } from '../../reducer/updateCommReducer';
 
 
-export default class HomeScreen extends Component{
+class HomeScreen extends Component{
 
     constructor(props){
         super(props);
-        this.state ={ isLoading: true,userId : '5db7d2513c6cbc15d538be46'}
+        this.state ={ 
+            isLoading: true,
+            userId : '5db7d2513c6cbc15d538be46',
+            updated : false,
+        }
     }
 
     componentDidMount() {
@@ -38,6 +45,10 @@ export default class HomeScreen extends Component{
                 this.setState({isLoading : false})
             })
           });
+          if(this.props.state.updateStatus=='success'){
+            this.setState({updated : true})
+            this.props.updateCommFailure()
+          }
         }
 
     navigateToCommMain(commId,commName){
@@ -59,83 +70,99 @@ export default class HomeScreen extends Component{
         }
         const { navigate } = this.props.navigation;
         return (
-            <View style={styles.container}>
-                <View style={styles.title}><Text style = {styles.titleText}>가입</Text></View>
-                <View style={{height: wp('35%'),width : wp('100%'),marginBottom: wp('5%')}}>
-                <ScrollView style={styles.commList} horizontal={true}>
-                       {this.state.commListData.map((prop, index) => {
-                         return (
-                            <View style = {{justifyContent : 'center',width :wp('20%'),marginRight: wp('5%'),backgroundColor : 'blue'}} key={index}>
-                                <TouchableHighlight style={styles.commImg_big} onPress={() => this.navigateToCommMain(prop._id.$oid,prop.name)} underlayColor='white'><Text></Text></TouchableHighlight>
-                                <View style ={{width : wp('100%'),backgroundColor:'red'}}><Text style={styles.commTitle} numberOfLines={1}>{prop.name}</Text></View>
-                            </View>
-                         );
-                      })}
-                       <TouchableHighlight style={styles.addButton} onPress={() => navigate('SearchScreen')} underlayColor='#eee'>
-                            <Icon name='plus' type='antdesign' size = {30}/>
-                       </TouchableHighlight>
-            </ScrollView>
-            </View>
-            <View style={styles.title}><Text style = {styles.titleText}>최신 소식</Text></View>
-            <View style = {{flex : 1}}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.contentsList}>
-                            <View style={styles.commImg_small}></View>
-                            <View style={styles.contents}>
-                                <Text style ={styles.commTitle_column}>비대위이름</Text>
-                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
-                            </View>
-                    </View>
-                    <View style={styles.contentsList}>
-                            <View style={styles.commImg_small}></View>
-                            <View style={styles.contents}>
-                                <Text style ={styles.commTitle_column}>비대위이름</Text>
-                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
-                            </View>
-                    </View>
-                    <View style={styles.contentsList}>
-                            <View style={styles.commImg_small}></View>
-                            <View style={styles.contents}>
-                                <Text style ={styles.commTitle_column}>비대위이름</Text>
-                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
-                            </View>
-                    </View>
-                    <View style={styles.contentsList}>
-                            <View style={styles.commImg_small}></View>
-                            <View style={styles.contents}>
-                                <Text style ={styles.commTitle_column}>비대위이름</Text>
-                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
-                            </View>
-                    </View>
-                    <View style={styles.contentsList}>
-                            <View style={styles.commImg_small}></View>
-                            <View style={styles.contents}>
-                                <Text style ={styles.commTitle_column}>비대위이름</Text>
-                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
-                            </View>
-                    </View>
-                    <View style={styles.contentsList}>
-                            <View style={styles.commImg_small}></View>
-                            <View style={styles.contents}>
-                                <Text style ={styles.commTitle_column}>비대위이름</Text>
-                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
-                            </View>
-                    </View>
-                    <View style={styles.contentsList}>
-                            <View style={styles.commImg_small}></View>
-                            <View style={styles.contents}>
-                                <Text style ={styles.commTitle_column}>비대위이름</Text>
-                                <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
-                            </View>
-                    </View>
+                <View style={styles.container}>
+                    <View style={styles.title}><Text style = {styles.titleText}>가입{ this.props.state.updateStatus}</Text></View>
+                    <View style={{height: wp('35%'),width : wp('100%'),marginBottom: wp('5%')}}>
+                    <ScrollView style={styles.commList} horizontal={true}>
+                           {this.state.commListData.map((prop, index) => {
+                             return (
+                                <View style = {{justifyContent : 'center',width :wp('20%'),marginRight: wp('5%'),backgroundColor : 'blue'}} key={index}>
+                                    <TouchableHighlight style={styles.commImg_big} onPress={() => this.navigateToCommMain(prop._id.$oid,prop.name)} underlayColor='white'><Text></Text></TouchableHighlight>
+                                    <View style ={{width : wp('100%'),backgroundColor:'red'}}><Text style={styles.commTitle} numberOfLines={1}>{prop.name}</Text></View>
+                                </View>
+                             );
+                          })}
+                           <TouchableHighlight style={styles.addButton} onPress={() => navigate('SearchScreen')} underlayColor='#eee'>
+                                <Icon name='plus' type='antdesign' size = {30}/>
+                           </TouchableHighlight>
                 </ScrollView>
-            </View>
-            <TouchableHighlight style={styles.pointBox} onPress={() => navigate('PointScreen')}><Text style={styles.pointText}>{this.state.userPointData[0]['score']} 포인트</Text></TouchableHighlight>
-            </View>
+                </View>
+                <View style={styles.title}><Text style = {styles.titleText}>최신 소식</Text></View>
+                <View style = {{flex : 1}}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View style={styles.contentsList}>
+                                <View style={styles.commImg_small}></View>
+                                <View style={styles.contents}>
+                                    <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                    <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                                </View>
+                        </View>
+                        <View style={styles.contentsList}>
+                                <View style={styles.commImg_small}></View>
+                                <View style={styles.contents}>
+                                    <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                    <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                                </View>
+                        </View>
+                        <View style={styles.contentsList}>
+                                <View style={styles.commImg_small}></View>
+                                <View style={styles.contents}>
+                                    <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                    <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                                </View>
+                        </View>
+                        <View style={styles.contentsList}>
+                                <View style={styles.commImg_small}></View>
+                                <View style={styles.contents}>
+                                    <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                    <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                                </View>
+                        </View>
+                        <View style={styles.contentsList}>
+                                <View style={styles.commImg_small}></View>
+                                <View style={styles.contents}>
+                                    <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                    <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                                </View>
+                        </View>
+                        <View style={styles.contentsList}>
+                                <View style={styles.commImg_small}></View>
+                                <View style={styles.contents}>
+                                    <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                    <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                                </View>
+                        </View>
+                        <View style={styles.contentsList}>
+                                <View style={styles.commImg_small}></View>
+                                <View style={styles.contents}>
+                                    <Text style ={styles.commTitle_column}>비대위이름</Text>
+                                    <Text style ={styles.contentsTitle}>설문조사를 진행하고 있습니다.</Text>
+                                </View>
+                        </View>
+                    </ScrollView>
+                </View>
+                <TouchableHighlight style={styles.pointBox} onPress={() => navigate('PointScreen')}><Text style={styles.pointText}>{this.state.userPointData[0]['score']} 포인트</Text></TouchableHighlight>
+                </View>
         );
     }
 }
 
+
+function mapStateToProps(state){
+  return {
+    state: state.updateCommReducer
+  };
+}
+
+// Actions을 props로 변환
+function matchDispatchToProps(dispatch){
+  return bindActionCreators({
+    updateCommSuccess: updateCommSuccess,
+    updateCommFailure: updateCommFailure
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(HomeScreen);
 const styles = StyleSheet.create({
     container: {
         flex: 1,

@@ -17,11 +17,16 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import CustomList from '../../customComponents/CustomList';
 import CommActivityList from '../../customComponents/CommActivityList';
 import HomeScreen from '../HomeScreen';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 dayjs.locale('ko')
 
-export default class SearchScreen extends Component{
+
+import { updateComm, updateCommSuccess,updateCommFailure } from '../../reducer/updateCommReducer';
+
+class SearchScreen extends Component{
     constructor(props){
         super(props);
         this.state ={ 
@@ -117,10 +122,13 @@ export default class SearchScreen extends Component{
             if(responseJson.result =='success'){
                 this.addStatusToList();
                 if(status==0){
+                    this.props.updateCommSuccess()
                     this.setState({snackbarMsg : "비대위에 정상적으로 가입되었습니다.",visible : true})
                 }else{
                     this.setState({snackbarMsg : "정상적으로 탈퇴하였습니다.",visible : true})
                 }
+            }else{
+                this.props.updateCommFailure()
             }
         })
     }
@@ -201,7 +209,7 @@ export default class SearchScreen extends Component{
                 <ScrollView style={styles.categoryList} horizontal = {true} indicatorStyle = {'white'}>
                     <TouchableHighlight style={this.state.onTouchedIndex === 0  ? styles.cagegoryItemTouched : styles.cagegoryItem} onPress={() => this.handlerCategoryTouch('all',0)} underlayColor='#eee'>
                         <Text style={styles.categoryTitle}>
-                            모든목록
+                            모든목록{this.props.state.updateStatus}
                         </Text>
                     </TouchableHighlight>
                     {this.state.categoryListData.map((element, index) => {
@@ -218,7 +226,7 @@ export default class SearchScreen extends Component{
             <View style={styles.listSection}>
                 <View style = {styles.listSectionTitleView}>
                     <Text style={styles.listSectionTitle}>
-                        {this.state.title == '' ? "모든 목록" : `키워드 : ${this.state.title}`}
+                        {this.state.title == '' ? "모든 목록" : `키워드 : ${this.state.title}`} 
                     </Text>
                 </View>
                 <View style = {styles.listScrollSection}>
@@ -262,6 +270,24 @@ export default class SearchScreen extends Component{
         );
     }
 }
+
+
+function mapStateToProps(state){
+  return {
+    state: state.updateCommReducer
+  };
+}
+
+// Actions을 props로 변환
+function matchDispatchToProps(dispatch){
+  return bindActionCreators({
+    updateCommSuccess: updateCommSuccess,
+    updateCommFailure: updateCommFailure
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(SearchScreen);
+
 
 const styles = StyleSheet.create({
     container: {
