@@ -1,3 +1,8 @@
+# 구조
+- ### [멘토링](https://docs.google.com/spreadsheets/d/1pRO5yP70_hxWm3l_DAs2Ue72WSgVaQyN-qa_trTeHLE/edit?usp=sharing)
+<br />
+<br />
+
 # 전체 일정
 ### [5월] 추가모집과 면접, 최종 결과 발표 그리고 발대식과 킥오프 세미나
 <br />
